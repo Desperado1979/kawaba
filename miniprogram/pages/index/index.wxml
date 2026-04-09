@@ -11,7 +11,12 @@
   <!-- 轮播 Banner -->
   <swiper class="banner-swiper" indicator-dots autoplay circular interval="{{4000}}" duration="{{500}}">
     <swiper-item wx:for="{{banners}}" wx:key="id">
-      <image class="banner-img" src="{{item.image}}" mode="aspectFill" bindtap="onBannerTap" data-item="{{item}}" />
+      <view class="banner-wrap" bindtap="onBannerTap" data-item="{{item}}">
+        <image class="banner-img" src="{{item.image}}" mode="aspectFill" />
+        <view class="banner-title-overlay" wx:if="{{item.title}}">
+          <text class="banner-title-text">{{item.title}}</text>
+        </view>
+      </view>
     </swiper-item>
   </swiper>
 
@@ -56,9 +61,13 @@
       />
     </view>
 
-    <!-- 空状态 -->
+    <!-- 空状态 + 初始化数据入口 -->
     <view class="empty-state" wx:if="{{!loading && newsList.length === 0}}">
       <text class="empty-text">暂无新闻</text>
+      <view class="init-btn" wx:if="{{!dataReady}}" bindtap="onInitData">
+        <text>初始化示例数据</text>
+      </view>
+      <text class="init-tip" wx:if="{{!dataReady}}">请先在微信开发者工具上传云函数后点击</text>
     </view>
 
     <!-- 加载更多 -->

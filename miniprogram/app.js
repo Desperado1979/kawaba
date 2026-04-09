@@ -1,6 +1,6 @@
 App({
   globalData: {
-    env: "",
+    env: "cloud1-4gpp2a4lba18afaf",
     userInfo: null,
     isLogin: false
   },

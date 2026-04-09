@@ -4,6 +4,21 @@ const _ = db.command;
 const PAGE_SIZE = 10;
 
 module.exports = {
+  getTopNews() {
+    return db.collection("news")
+      .where({ is_top: true })
+      .orderBy("created_at", "desc")
+      .limit(5)
+      .get();
+  },
+
+  initData() {
+    return wx.cloud.callFunction({
+      name: "quickstartFunctions",
+      data: { type: "initData" }
+    });
+  },
+
   getNewsList(category, page = 0) {
     let query = db.collection("news").orderBy("created_at", "desc");
     if (category && category !== "all") {
