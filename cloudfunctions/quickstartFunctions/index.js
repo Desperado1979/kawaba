@@ -1,6 +1,7 @@
 const cloud = require("wx-server-sdk");
 cloud.init({ env: cloud.DYNAMIC_CURRENT_ENV });
 const db = cloud.database();
+const _ = db.command;
 
 // ==================== 原有功能 ====================
 
@@ -366,6 +367,37 @@ const initData = async () => {
   return { success: true, message: "数据初始化完成", results };
 };
 
+const cleanupDemoNews = async () => {
+  // Remove demo/seed news that are not tied to a real origin URL.
+  // Keep crawled/real news which always have `origin_url`.
+  const where = _.and([
+    { source: "Kavabar" },
+    _.or([{ origin_url: "" }, { origin_url: _.exists(false) }]),
+  ]);
+
+  let removed = 0;
+  while (true) {
+    const batch = await db.collection("news").where(where).limit(100).get();
+    if (!batch.data || batch.data.length === 0) break;
+
+    // Remove in parallel-ish (Promise.all) to speed up.
+    await Promise.all(
+      batch.data.map((doc) =>
+        db
+          .collection("news")
+          .doc(doc._id)
+          .remove()
+          .then(() => {
+            removed += 1;
+          })
+          .catch(() => {})
+      )
+    );
+  }
+
+  return { success: true, removed };
+};
+
 // ==================== 云函数入口 ====================
 
 exports.main = async (event, context) => {
@@ -376,6 +408,8 @@ exports.main = async (event, context) => {
       return await getMiniProgramCode();
     case "initData":
       return await initData();
+    case "cleanupDemoNews":
+      return await cleanupDemoNews();
     default:
       return { success: false, message: "未知的操作类型: " + event.type };
   }

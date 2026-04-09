@@ -151,4 +151,28 @@ Page({
       });
     }
   }
+
+  ,
+
+  async onCleanupDemoNews() {
+    wx.showModal({
+      title: "清理示例新闻",
+      content: "将删除示例/演示新闻（source=Kavabar 且无来源链接）。此操作不可撤销，确认继续？",
+      success: async (r) => {
+        if (!r.confirm) return;
+        wx.showLoading({ title: "清理中..." });
+        try {
+          const res = await api.cleanupDemoNews();
+          wx.hideLoading();
+          wx.showToast({ title: `已删除${res.result?.removed || 0}条`, icon: "none" });
+          this.setData({ page: 0, newsList: [], noMore: false });
+          this.loadBanners();
+          this.loadNews();
+        } catch (e) {
+          wx.hideLoading();
+          wx.showModal({ title: "清理失败", content: e.message || "请确认云函数已上传", showCancel: false });
+        }
+      }
+    });
+  }
 });

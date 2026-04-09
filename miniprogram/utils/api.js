@@ -66,6 +66,13 @@ module.exports = {
     return { success: errors.length === 0, results, errors: errors.slice(0, 3) };
   },
 
+  cleanupDemoNews() {
+    return wx.cloud.callFunction({
+      name: "quickstartFunctions",
+      data: { type: "cleanupDemoNews" }
+    });
+  },
+
   getNewsList(category, page = 0) {
     let query = db.collection("news").orderBy("created_at", "desc");
     if (category && category !== "all") {

@@ -28,6 +28,13 @@
     <text class="init-tip">请先在云开发控制台创建集合: news, classifieds, businesses, users</text>
   </view>
 
+  <!-- 维护工具（用于清理示例新闻） -->
+  <view class="maint-section" wx:if="{{dataReady}}">
+    <view class="maint-link" bindtap="onCleanupDemoNews">
+      <text>清理示例新闻</text>
+    </view>
+  </view>
+
   <!-- 新闻分类 Tab -->
   <scroll-view class="tabs-scroll" scroll-x enhanced show-scrollbar="{{false}}">
     <view class="tabs-row">
