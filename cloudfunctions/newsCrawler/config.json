@@ -1,0 +1,11 @@
+{
+  "permissions": {},
+  "triggers": [
+    {
+      "name": "crawlTimer",
+      "type": "timer",
+      "config": "0 0 */2 * * * *"
+    }
+  ]
+}
+
