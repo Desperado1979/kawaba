@@ -28,7 +28,22 @@ function formatPrice(price) {
   return "VUV " + Number(price).toLocaleString();
 }
 
+function getOrCreateDeviceId() {
+  const key = "kavabar_device_id";
+  try {
+    const existing = wx.getStorageSync(key);
+    if (existing) return existing;
+  } catch (_) {}
+
+  const id = `dev_${Date.now().toString(36)}_${Math.random().toString(36).slice(2, 10)}`;
+  try {
+    wx.setStorageSync(key, id);
+  } catch (_) {}
+  return id;
+}
+
 module.exports = {
   formatTime,
-  formatPrice
+  formatPrice,
+  getOrCreateDeviceId
 };

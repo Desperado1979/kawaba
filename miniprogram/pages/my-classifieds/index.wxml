@@ -1,0 +1,30 @@
+<view class="page-my">
+  <view class="tip">按本机识别码归属（免注册）。卸载/清缓存会丢失“我的发布”。</view>
+
+  <view class="list">
+    <view class="card" wx:for="{{list}}" wx:key="_id">
+      <view class="row-top">
+        <text class="title ellipsis-2">{{item.title}}</text>
+        <text class="status status-{{item.status}}">{{item.statusText}}</text>
+      </view>
+      <view class="meta">
+        <text>{{item.categoryName}}</text>
+        <text class="dot">·</text>
+        <text>{{item.timeText}}</text>
+      </view>
+      <view class="actions">
+        <view class="btn light" bindtap="goDetail" data-id="{{item._id}}">查看</view>
+        <view class="btn light" bindtap="goEdit" data-id="{{item._id}}">编辑</view>
+        <view class="btn danger" bindtap="onUnpublish" data-id="{{item._id}}">下架</view>
+      </view>
+    </view>
+
+    <view class="empty" wx:if="{{!loading && list.length === 0}}">
+      <text>你还没有发布过信息</text>
+    </view>
+
+    <view class="load" wx:if="{{loading}}">加载中...</view>
+    <view class="load" wx:if="{{noMore && list.length > 0}}">没有更多了</view>
+  </view>
+</view>
+

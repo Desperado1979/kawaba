@@ -8,7 +8,9 @@
     "pages/classified-detail/index",
     "pages/business-detail/index",
     "pages/publish/index",
-    "pages/search/index"
+    "pages/search/index",
+    "pages/my-classifieds/index",
+    "pages/edit-classified/index"
   ],
   "window": {
     "backgroundColor": "#F5F5F5",

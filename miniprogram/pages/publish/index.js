@@ -1,4 +1,5 @@
 const api = require("../../utils/api");
+const util = require("../../utils/util");
 
 const CATEGORY_OPTIONS = [
   { key: "rent", name: "租房" },
@@ -77,6 +78,7 @@ Page({
     wx.showLoading({ title: "发布中..." });
 
     try {
+      const deviceId = util.getOrCreateDeviceId();
       let uploadedImages = [];
       for (const img of this.data.images) {
         const cloudPath = `classifieds/${Date.now()}_${Math.random().toString(36).substring(7)}.jpg`;
@@ -95,8 +97,10 @@ Page({
         location: this.data.location.trim(),
         contact: this.data.contact.trim(),
         images: uploadedImages,
+        device_id: deviceId,
         status: 1,
-        created_at: new Date()
+        created_at: new Date(),
+        updated_at: new Date()
       });
 
       wx.hideLoading();

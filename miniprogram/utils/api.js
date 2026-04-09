@@ -109,6 +109,19 @@ module.exports = {
     return db.collection("classifieds").add({ data });
   },
 
+  getMyClassifieds(deviceId, page = 0) {
+    return db.collection("classifieds")
+      .where({ device_id: deviceId })
+      .orderBy("created_at", "desc")
+      .skip(page * PAGE_SIZE)
+      .limit(PAGE_SIZE)
+      .get();
+  },
+
+  updateClassified(id, data) {
+    return db.collection("classifieds").doc(id).update({ data });
+  },
+
   getBusinessList(category, page = 0) {
     let query = db.collection("businesses").orderBy("rating", "desc");
     if (category && category !== "all") {

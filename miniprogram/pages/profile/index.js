@@ -39,11 +39,7 @@ Page({
   },
 
   goMyPublish() {
-    if (!this.data.isLogin) {
-      wx.showToast({ title: "请先登录", icon: "none" });
-      return;
-    }
-    wx.showToast({ title: "功能开发中", icon: "none" });
+    wx.navigateTo({ url: "/pages/my-classifieds/index" });
   },
 
   goMyFavorites() {
