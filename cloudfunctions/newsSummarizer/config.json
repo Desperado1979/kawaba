@@ -1,0 +1,11 @@
+{
+  "permissions": {},
+  "triggers": [
+    {
+      "name": "summarizeTimer",
+      "type": "timer",
+      "config": "0 30 */2 * * * *"
+    }
+  ]
+}
+
