@@ -4,7 +4,7 @@ const util = require("../../utils/util");
 Page({
   data: {
     banners: [
-      { id: 1, image: "/images/banner-placeholder.jpg", title: "欢迎来到 Kawaba 瓦努阿图华人社区" }
+      { id: 1, image: "/images/banner-placeholder.jpg", title: "欢迎来到 Kavabar 瓦努阿图华人社区" }
     ],
     categories: [
       { key: "all", name: "全部" },
@@ -83,11 +83,11 @@ Page({
 
   loadMockNews() {
     const mockNews = [
-      { _id: "mock1", title: "瓦努阿图华人社区举办2026年新春联欢晚会", source: "Kawaba", category: "chinese", cover_image: "", view_count: 328, created_at: "2026-04-08T10:00:00Z" },
-      { _id: "mock2", title: "维拉港新国际航线即将开通 直飞布里斯班仅需3小时", source: "Kawaba", category: "local", cover_image: "", view_count: 512, created_at: "2026-04-07T08:30:00Z" },
-      { _id: "mock3", title: "瓦努阿图房产投资指南：2026年最新政策解读", source: "Kawaba", category: "life", cover_image: "", view_count: 245, created_at: "2026-04-06T14:20:00Z" },
-      { _id: "mock4", title: "本地华人超市「万家福」新店开业 特价优惠持续两周", source: "Kawaba", category: "chinese", cover_image: "", view_count: 189, created_at: "2026-04-05T09:00:00Z" },
-      { _id: "mock5", title: "瓦努阿图旅游旺季来临 酒店预订量同比增长40%", source: "Kawaba", category: "local", cover_image: "", view_count: 673, created_at: "2026-04-04T16:45:00Z" }
+      { _id: "mock1", title: "瓦努阿图华人社区举办2026年新春联欢晚会", source: "Kavabar", category: "chinese", cover_image: "", view_count: 328, created_at: "2026-04-08T10:00:00Z" },
+      { _id: "mock2", title: "维拉港新国际航线即将开通 直飞布里斯班仅需3小时", source: "Kavabar", category: "local", cover_image: "", view_count: 512, created_at: "2026-04-07T08:30:00Z" },
+      { _id: "mock3", title: "瓦努阿图房产投资指南：2026年最新政策解读", source: "Kavabar", category: "life", cover_image: "", view_count: 245, created_at: "2026-04-06T14:20:00Z" },
+      { _id: "mock4", title: "本地华人超市「万家福」新店开业 特价优惠持续两周", source: "Kavabar", category: "chinese", cover_image: "", view_count: 189, created_at: "2026-04-05T09:00:00Z" },
+      { _id: "mock5", title: "瓦努阿图旅游旺季来临 酒店预订量同比增长40%", source: "Kavabar", category: "local", cover_image: "", view_count: 673, created_at: "2026-04-04T16:45:00Z" }
     ];
     this.setData({
       newsList: mockNews.map(item => ({ ...item, timeText: util.formatTime(item.created_at) })),

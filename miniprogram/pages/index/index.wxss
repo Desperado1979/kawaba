@@ -182,8 +182,16 @@
   color: #999999;
 }
 
+.init-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 24rpx;
+  background-color: #FFFFFF;
+  margin-bottom: 4rpx;
+}
+
 .init-btn {
-  margin-top: 32rpx;
   padding: 20rpx 56rpx;
   background-color: #CE1126;
   color: #FFFFFF;
@@ -192,7 +200,7 @@
 }
 
 .init-tip {
-  margin-top: 16rpx;
+  margin-top: 12rpx;
   font-size: 22rpx;
   color: #CCCCCC;
   text-align: center;

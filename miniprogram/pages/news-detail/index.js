@@ -30,7 +30,7 @@ Page({
           title: "新闻详情加载失败",
           content: "请检查网络连接后重试",
           timeText: "",
-          source: "Kawaba"
+          source: "Kavabar"
         }
       });
     }
@@ -46,7 +46,7 @@ Page({
 
   onShareAppMessage() {
     return {
-      title: this.data.news?.title || "Kawaba 新闻",
+      title: this.data.news?.title || "Kavabar 新闻",
       path: `/pages/news-detail/index?id=${this.data.id}`
     };
   }

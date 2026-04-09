@@ -61,15 +61,15 @@ Page({
   goFeedback() {
     wx.showModal({
       title: "意见反馈",
-      content: "如有建议或问题，请联系我们：\nkawaba@community.vu",
+      content: "如有建议或问题，请联系我们：\nkavabar@community.vu",
       showCancel: false
     });
   },
 
   goAbout() {
     wx.showModal({
-      title: "关于 Kawaba",
-      content: "Kawaba 瓦努阿图华人社区\n\n致力于为瓦努阿图华人提供本地新闻资讯、分类信息、商家黄页等服务。\n\n版本：1.0.0",
+      title: "关于 Kavabar",
+      content: "Kavabar 瓦努阿图华人社区\n\n致力于为瓦努阿图华人提供本地新闻资讯、分类信息、商家黄页等服务。\n\n版本：1.0.0",
       showCancel: false
     });
   }

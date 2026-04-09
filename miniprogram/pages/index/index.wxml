@@ -20,6 +20,14 @@
     </swiper-item>
   </swiper>
 
+  <!-- 数据初始化入口（云数据库无数据时显示） -->
+  <view class="init-section" wx:if="{{!dataReady}}">
+    <view class="init-btn" bindtap="onInitData">
+      <text>一键初始化示例数据</text>
+    </view>
+    <text class="init-tip">请先在微信开发者工具上传云函数，再点此按钮</text>
+  </view>
+
   <!-- 新闻分类 Tab -->
   <scroll-view class="tabs-scroll" scroll-x enhanced show-scrollbar="{{false}}">
     <view class="tabs-row">
@@ -47,7 +55,7 @@
       <view class="news-content">
         <view class="news-title ellipsis-2">{{item.title}}</view>
         <view class="news-meta">
-          <text class="news-source">{{item.source || 'Kawaba'}}</text>
+          <text class="news-source">{{item.source || 'Kavabar'}}</text>
           <text class="news-time">{{item.timeText}}</text>
           <text class="news-views">{{item.view_count || 0}}阅读</text>
         </view>
@@ -61,13 +69,9 @@
       />
     </view>
 
-    <!-- 空状态 + 初始化数据入口 -->
+    <!-- 空状态 -->
     <view class="empty-state" wx:if="{{!loading && newsList.length === 0}}">
       <text class="empty-text">暂无新闻</text>
-      <view class="init-btn" wx:if="{{!dataReady}}" bindtap="onInitData">
-        <text>初始化示例数据</text>
-      </view>
-      <text class="init-tip" wx:if="{{!dataReady}}">请先在微信开发者工具上传云函数后点击</text>
     </view>
 
     <!-- 加载更多 -->

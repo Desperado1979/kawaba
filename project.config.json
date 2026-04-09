@@ -45,7 +45,7 @@
     "disableSWC": true
   },
   "appid": "wxb76ddc3689d4ebc1",
-  "projectname": "kawaba",
+  "projectname": "kavabar",
   "libVersion": "2.20.1",
   "cloudfunctionTemplateRoot": "cloudfunctionTemplate/",
   "condition": {

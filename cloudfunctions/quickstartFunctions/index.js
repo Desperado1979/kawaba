@@ -22,14 +22,14 @@ const getMiniProgramCode = async () => {
   return upload.fileID;
 };
 
-// ==================== Kawaba 数据初始化 ====================
+// ==================== Kavabar 数据初始化 ====================
 
 const NEWS_DATA = [
   {
     title: "瓦努阿图华人社区举办2026年新春联欢晚会 近300人参加",
     content: "4月5日晚，瓦努阿图华人华侨联合会在维拉港Grand Hotel举办2026年新春联欢晚会。中国驻瓦努阿图大使出席致辞，近300名华人华侨及当地友人参加。晚会节目精彩纷呈，包括舞龙舞狮、民族歌舞、诗朗诵等。联合会会长表示，将继续加强华人社区凝聚力，促进中瓦两国人民友谊。",
     category: "chinese",
-    source: "Kawaba",
+    source: "Kavabar",
     cover_image: "",
     view_count: 328,
     is_top: true,
@@ -49,7 +49,7 @@ const NEWS_DATA = [
     title: "瓦努阿图房产投资指南：2026年最新政策解读",
     content: "瓦努阿图政府近期更新了外国人购房政策。根据新规，外国人可以购买最长75年的土地租赁权，审批流程从原来的6个月缩短至3个月。维拉港核心地段公寓价格约15-30万美元，海景别墅50-120万美元。投资瓦努阿图房产还可申请永久居留权，成为许多华人关注的热点。",
     category: "life",
-    source: "Kawaba",
+    source: "Kavabar",
     cover_image: "",
     view_count: 245,
     is_top: false,
@@ -59,7 +59,7 @@ const NEWS_DATA = [
     title: "本地华人超市「万家福」新店开业 特价优惠持续两周",
     content: "位于维拉港Nambatu区的万家福华人超市新店于4月1日正式开业。新店面积较原店扩大一倍，新增生鲜蔬果区和中式熟食档口。开业期间全场商品享8.5折优惠，部分商品买一送一。店主表示将持续引进更多中国食品，满足华人社区日常需求。",
     category: "chinese",
-    source: "Kawaba",
+    source: "Kavabar",
     cover_image: "",
     view_count: 189,
     is_top: false,
@@ -79,7 +79,7 @@ const NEWS_DATA = [
     title: "瓦努阿图中文学校招生 本学期开设少儿和成人班",
     content: "瓦努阿图中文学校2026年第二学期招生开始。本学期开设少儿启蒙班（4-7岁）、少儿进阶班（8-12岁）和成人日常会话班三个班级。每周六上午9:00-12:00在维拉港华人活动中心上课。学费每学期200美元，华人子女优惠价150美元。报名请联系张老师：+678 5551234。",
     category: "chinese",
-    source: "Kawaba",
+    source: "Kavabar",
     cover_image: "",
     view_count: 156,
     is_top: false,
@@ -99,7 +99,7 @@ const NEWS_DATA = [
     title: "维拉港新开中医诊所 提供针灸推拿等传统疗法",
     content: "由来自广州的李医生开设的「南洋中医馆」于上月在维拉港市中心正式营业。诊所提供中医内科、针灸、推拿、拔罐等传统中医服务。李医生拥有20年临床经验，曾在广东省中医院任职。诊所同时提供英语和比斯拉马语服务，方便当地患者就诊。预约电话：+678 5559876。",
     category: "life",
-    source: "Kawaba",
+    source: "Kavabar",
     cover_image: "",
     view_count: 203,
     is_top: false,
@@ -109,7 +109,7 @@ const NEWS_DATA = [
     title: "瓦努阿图公民身份项目2026年新规 投资门槛调整",
     content: "瓦努阿图政府宣布自2026年7月1日起调整公民身份投资计划（VCP）。单人申请投资门槛从13万美元调整为15万美元，家庭申请（含配偶和两名子女）从18万美元调整为20万美元。新规同时增加了背景调查深度。移民律师建议有意向的申请人在新规生效前提交申请。",
     category: "life",
-    source: "Kawaba",
+    source: "Kavabar",
     cover_image: "",
     view_count: 467,
     is_top: false,
@@ -119,7 +119,7 @@ const NEWS_DATA = [
     title: "Santo岛华人种植园喜获丰收 有机蔬菜供应维拉港市场",
     content: "位于Santo岛Luganville附近的华人有机蔬菜种植园今年迎来丰收。种植园主王先生介绍，今年产量较去年增长30%，主要品种包括白菜、芥兰、番茄、黄瓜等。部分蔬菜已开始供应维拉港超市和中餐馆。王先生计划明年扩大种植面积，同时培训当地员工参与种植管理。",
     category: "chinese",
-    source: "Kawaba",
+    source: "Kavabar",
     cover_image: "",
     view_count: 134,
     is_top: false,

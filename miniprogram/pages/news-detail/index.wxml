@@ -3,7 +3,7 @@
     <view class="article-header">
       <text class="article-title">{{news.title}}</text>
       <view class="article-meta">
-        <text class="meta-source">{{news.source || 'Kawaba'}}</text>
+        <text class="meta-source">{{news.source || 'Kavabar'}}</text>
         <text class="meta-time">{{news.timeText}}</text>
         <text class="meta-views">{{news.view_count || 0}} 阅读</text>
       </view>
