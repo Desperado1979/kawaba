@@ -6,6 +6,13 @@
       <text class="search-placeholder">搜索商家名称...</text>
     </view>
   </view>
+  
+  <!-- 商家入驻 -->
+  <view class="join-row" bindtap="goBusinessSubmit">
+    <text class="join-text">商家入驻</text>
+    <text class="join-tip">免费提交，审核后展示</text>
+    <text class="join-arrow">›</text>
+  </view>
 
   <!-- 分类网格 -->
   <view class="category-grid" wx:if="{{!selectedCategory}}">

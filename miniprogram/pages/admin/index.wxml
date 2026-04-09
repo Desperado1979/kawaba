@@ -1,0 +1,69 @@
+<view class="page-admin">
+  <view class="login-card" wx:if="{{!isAuthed}}">
+    <text class="login-title">管理员入口</text>
+    <input class="login-input" password placeholder="请输入管理密码" bindinput="onKeyInput" value="{{adminKey}}" />
+    <button class="login-btn" bindtap="onLogin">进入</button>
+    <text class="login-tip">密码在 miniprogram/app.js 的 globalData.adminKey</text>
+  </view>
+
+  <view wx:else>
+    <view class="tabs">
+      <view class="tab {{tab==='classifieds'?'active':''}}" bindtap="switchTab" data-tab="classifieds">分类信息</view>
+      <view class="tab {{tab==='biz'?'active':''}}" bindtap="switchTab" data-tab="biz">入驻审核</view>
+    </view>
+
+    <view class="filter-row">
+      <view class="filter {{statusFilter===-999?'on':''}}" bindtap="setFilter" data-status="-999">全部</view>
+      <view class="filter {{statusFilter===0?'on':''}}" bindtap="setFilter" data-status="0">待审</view>
+      <view class="filter {{statusFilter===1?'on':''}}" bindtap="setFilter" data-status="1">上架</view>
+      <view class="filter {{statusFilter===-1?'on':''}}" bindtap="setFilter" data-status="-1">下架</view>
+    </view>
+
+    <scroll-view class="list" scroll-y enhanced bindscrolltolower="loadMore">
+      <!-- 分类信息列表 -->
+      <view wx:if="{{tab==='classifieds'}}">
+        <view class="item" wx:for="{{items}}" wx:key="_id">
+          <view class="item-top">
+            <text class="item-title ellipsis-2">{{item.title}}</text>
+            <text class="badge b{{item.status}}">{{item.statusText}}</text>
+          </view>
+          <view class="item-meta">
+            <text>{{item.categoryName}}</text>
+            <text class="dot">·</text>
+            <text>{{item.timeText}}</text>
+          </view>
+          <view class="btn-row">
+            <view class="btn light" bindtap="goClassifiedDetail" data-id="{{item._id}}">查看</view>
+            <view class="btn ok" bindtap="setStatus" data-id="{{item._id}}" data-status="1">上架</view>
+            <view class="btn warn" bindtap="setStatus" data-id="{{item._id}}" data-status="0">待审</view>
+            <view class="btn danger" bindtap="setStatus" data-id="{{item._id}}" data-status="-1">下架</view>
+          </view>
+        </view>
+      </view>
+
+      <!-- 入驻申请列表 -->
+      <view wx:if="{{tab==='biz'}}">
+        <view class="item" wx:for="{{items}}" wx:key="_id">
+          <view class="item-top">
+            <text class="item-title ellipsis">{{item.name}}</text>
+            <text class="badge b{{item.status}}">{{item.statusText}}</text>
+          </view>
+          <view class="item-meta">
+            <text>{{item.categoryName}}</text>
+            <text class="dot">·</text>
+            <text>{{item.contact || item.phone || ''}}</text>
+          </view>
+          <view class="btn-row">
+            <view class="btn ok" bindtap="approveBiz" data-id="{{item._id}}">通过并入库</view>
+            <view class="btn danger" bindtap="rejectBiz" data-id="{{item._id}}">拒绝</view>
+          </view>
+        </view>
+      </view>
+
+      <view class="empty" wx:if="{{!loading && items.length===0}}">暂无数据</view>
+      <view class="load" wx:if="{{loading}}">加载中...</view>
+      <view class="load" wx:if="{{noMore && items.length>0}}">没有更多了</view>
+    </scroll-view>
+  </view>
+</view>
+

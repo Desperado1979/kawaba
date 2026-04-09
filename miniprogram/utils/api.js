@@ -122,6 +122,50 @@ module.exports = {
     return db.collection("classifieds").doc(id).update({ data });
   },
 
+  adminGetClassifieds(status, page = 0) {
+    let query = db.collection("classifieds").orderBy("created_at", "desc");
+    if (status !== -999) query = query.where({ status });
+    return query.skip(page * PAGE_SIZE).limit(PAGE_SIZE).get();
+  },
+
+  // business submissions (admin + user)
+  submitBusiness(data) {
+    return db.collection("business_submissions").add({ data });
+  },
+
+  adminGetBusinessSubmissions(status, page = 0) {
+    let query = db.collection("business_submissions").orderBy("created_at", "desc");
+    if (status !== -999) query = query.where({ status });
+    return query.skip(page * PAGE_SIZE).limit(PAGE_SIZE).get();
+  },
+
+  adminUpdateBusinessSubmission(id, data) {
+    return db.collection("business_submissions").doc(id).update({ data });
+  },
+
+  async adminApproveBusinessSubmission(id) {
+    const subRes = await db.collection("business_submissions").doc(id).get();
+    const sub = subRes.data;
+    if (!sub) throw new Error("submission not found");
+
+    await db.collection("businesses").add({
+      data: {
+        name: sub.name,
+        category: sub.category,
+        address: sub.address,
+        phone: sub.phone || sub.contact || "",
+        description: sub.description || "",
+        cover_image: sub.cover_image || "",
+        rating: 0,
+        created_at: new Date()
+      }
+    });
+
+    await db.collection("business_submissions").doc(id).update({
+      data: { status: 1, updated_at: new Date() }
+    });
+  },
+
   getBusinessList(category, page = 0) {
     let query = db.collection("businesses").orderBy("rating", "desc");
     if (category && category !== "all") {

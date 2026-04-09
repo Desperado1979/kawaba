@@ -2,7 +2,10 @@ App({
   globalData: {
     env: "cloud1-4gpp2a4lba18afaf",
     userInfo: null,
-    isLogin: false
+    isLogin: false,
+    // Admin gate for simple in-app moderation page.
+    // Change this value before releasing publicly.
+    adminKey: "kavabar-admin"
   },
 
   onLaunch() {

@@ -30,6 +30,35 @@
   color: #999999;
 }
 
+/* 商家入驻 */
+.join-row {
+  margin: 0 24rpx;
+  margin-top: 12rpx;
+  padding: 22rpx 24rpx;
+  background-color: #FFFFFF;
+  border-radius: 16rpx;
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+}
+
+.join-text {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: #1A1A1A;
+}
+
+.join-tip {
+  font-size: 24rpx;
+  color: #999999;
+  flex: 1;
+}
+
+.join-arrow {
+  font-size: 36rpx;
+  color: #CCCCCC;
+}
+
 /* 分类网格 */
 .category-grid {
   display: flex;

@@ -92,6 +92,6 @@
     </view>
   </view>
 
-  <!-- 版本 -->
-  <view class="version-text">Kavabar v1.0.0</view>
+  <!-- 版本（连续点击8次进入管理页） -->
+  <view class="version-text" bindtap="onVersionTap">Kavabar v1.0.0</view>
 </view>

@@ -1,0 +1,39 @@
+<view class="page-submit">
+  <view class="form-section">
+    <view class="form-item">
+      <text class="form-label">商家名称 *</text>
+      <input class="form-input" maxlength="40" placeholder="例如：金龙中餐厅" bindinput="onName" value="{{name}}" />
+    </view>
+
+    <view class="form-item">
+      <text class="form-label">分类 *</text>
+      <picker mode="selector" range="{{categoryOptions}}" range-key="name" bindchange="onCategoryChange">
+        <view class="picker-value">
+          <text class="{{category ? '' : 'placeholder'}}">{{categoryName || '请选择分类'}}</text>
+          <text class="picker-arrow">›</text>
+        </view>
+      </picker>
+    </view>
+
+    <view class="form-item">
+      <text class="form-label">地址</text>
+      <input class="form-input" maxlength="80" placeholder="例如：Port Vila" bindinput="onAddress" value="{{address}}" />
+    </view>
+
+    <view class="form-item">
+      <text class="form-label">联系电话 *</text>
+      <input class="form-input" type="number" placeholder="例如：+678..." bindinput="onPhone" value="{{phone}}" />
+    </view>
+
+    <view class="form-item">
+      <text class="form-label">简介</text>
+      <textarea class="form-textarea" maxlength="300" placeholder="简单介绍主营业务/营业时间等" bindinput="onDesc" value="{{description}}" />
+    </view>
+  </view>
+
+  <view class="submit-section safe-bottom">
+    <button class="submit-btn" bindtap="onSubmit">提交入驻</button>
+    <text class="submit-tip">提交后进入审核，审核通过后会展示在黄页</text>
+  </view>
+</view>
+

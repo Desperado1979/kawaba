@@ -108,5 +108,9 @@ Page({
 
   goSearch() {
     wx.navigateTo({ url: "/pages/search/index?type=business" });
+  },
+
+  goBusinessSubmit() {
+    wx.navigateTo({ url: "/pages/business-submit/index" });
   }
 });

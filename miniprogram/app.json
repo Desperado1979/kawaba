@@ -10,7 +10,9 @@
     "pages/publish/index",
     "pages/search/index",
     "pages/my-classifieds/index",
-    "pages/edit-classified/index"
+    "pages/edit-classified/index",
+    "pages/admin/index",
+    "pages/business-submit/index"
   ],
   "window": {
     "backgroundColor": "#F5F5F5",
