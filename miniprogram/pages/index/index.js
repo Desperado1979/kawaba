@@ -119,23 +119,36 @@ Page({
   },
 
   async onInitData() {
-    wx.showLoading({ title: "初始化数据中..." });
+    wx.showLoading({ title: "正在写入数据..." });
     try {
       const res = await api.initData();
       wx.hideLoading();
-      wx.showModal({
-        title: "初始化完成",
-        content: JSON.stringify(res.result?.results || res.result),
-        showCancel: false,
-        success: () => {
-          this.setData({ page: 0, newsList: [], noMore: false });
-          this.loadBanners();
-          this.loadNews();
-        }
-      });
+      const msg = `新闻${res.results.news}条 分类${res.results.classifieds}条 商家${res.results.businesses}条`;
+      if (res.errors && res.errors.length > 0) {
+        wx.showModal({
+          title: "部分失败",
+          content: msg + "\n错误: " + res.errors[0] + "\n\n请先在云开发控制台手动创建集合: news, classifieds, businesses, users",
+          showCancel: false
+        });
+      } else {
+        wx.showModal({
+          title: "初始化成功",
+          content: msg,
+          showCancel: false,
+          success: () => {
+            this.setData({ page: 0, newsList: [], noMore: false, dataReady: true });
+            this.loadBanners();
+            this.loadNews();
+          }
+        });
+      }
     } catch (e) {
       wx.hideLoading();
-      wx.showModal({ title: "初始化失败", content: e.message || "请确认云函数已上传", showCancel: false });
+      wx.showModal({
+        title: "初始化失败",
+        content: (e.message || JSON.stringify(e)) + "\n\n请先在云开发控制台手动创建4个集合:\nnews\nclassifieds\nbusinesses\nusers",
+        showCancel: false
+      });
     }
   }
 });

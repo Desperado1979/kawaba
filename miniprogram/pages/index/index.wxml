@@ -23,9 +23,9 @@
   <!-- 数据初始化入口（云数据库无数据时显示） -->
   <view class="init-section" wx:if="{{!dataReady}}">
     <view class="init-btn" bindtap="onInitData">
-      <text>一键初始化示例数据</text>
+      <text>一键写入示例数据</text>
     </view>
-    <text class="init-tip">请先在微信开发者工具上传云函数，再点此按钮</text>
+    <text class="init-tip">请先在云开发控制台创建集合: news, classifieds, businesses, users</text>
   </view>
 
   <!-- 新闻分类 Tab -->
