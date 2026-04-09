@@ -1,0 +1,187 @@
+.page-yellowpage {
+  background-color: #F5F5F5;
+  min-height: 100vh;
+}
+
+/* 搜索栏 */
+.search-bar {
+  padding: 16rpx 24rpx;
+  background-color: #FFFFFF;
+}
+
+.search-inner {
+  display: flex;
+  align-items: center;
+  background-color: #F5F5F5;
+  border-radius: 32rpx;
+  padding: 14rpx 24rpx;
+  height: 64rpx;
+}
+
+.search-icon {
+  width: 32rpx;
+  height: 32rpx;
+  margin-right: 12rpx;
+  opacity: 0.5;
+}
+
+.search-placeholder {
+  font-size: 26rpx;
+  color: #999999;
+}
+
+/* 分类网格 */
+.category-grid {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 24rpx;
+  background-color: #FFFFFF;
+  margin-top: 16rpx;
+  border-radius: 16rpx;
+  margin-left: 24rpx;
+  margin-right: 24rpx;
+}
+
+.category-item {
+  width: 25%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 24rpx 0;
+}
+
+.category-icon-wrap {
+  width: 96rpx;
+  height: 96rpx;
+  border-radius: 24rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 12rpx;
+}
+
+.category-emoji {
+  font-size: 40rpx;
+}
+
+.category-name {
+  font-size: 24rpx;
+  color: #333333;
+}
+
+/* 列表头部 */
+.list-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 24rpx;
+  background-color: #FFFFFF;
+  margin-top: 16rpx;
+}
+
+.list-title {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #1A1A1A;
+}
+
+.list-back {
+  font-size: 26rpx;
+  color: #CE1126;
+}
+
+/* 商家列表 */
+.business-list {
+  padding: 0 24rpx 24rpx;
+}
+
+.business-card {
+  display: flex;
+  background-color: #FFFFFF;
+  border-radius: 16rpx;
+  padding: 24rpx;
+  margin-top: 16rpx;
+}
+
+.business-cover {
+  width: 160rpx;
+  height: 160rpx;
+  border-radius: 12rpx;
+  flex-shrink: 0;
+  background-color: #F5F5F5;
+}
+
+.business-info {
+  flex: 1;
+  margin-left: 20rpx;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.business-name {
+  font-size: 30rpx;
+  color: #1A1A1A;
+  font-weight: 500;
+}
+
+.business-rating {
+  display: flex;
+  align-items: center;
+  margin-top: 8rpx;
+}
+
+.star {
+  font-size: 24rpx;
+  color: #FDCE12;
+}
+
+.rating-num {
+  font-size: 22rpx;
+  color: #999999;
+  margin-left: 8rpx;
+}
+
+.business-address {
+  display: flex;
+  align-items: center;
+  font-size: 22rpx;
+  color: #999999;
+  margin-top: 8rpx;
+}
+
+.loc-icon {
+  width: 24rpx;
+  height: 24rpx;
+  margin-right: 6rpx;
+  flex-shrink: 0;
+}
+
+.business-phone {
+  margin-top: 8rpx;
+}
+
+.phone-text {
+  font-size: 24rpx;
+  color: #009543;
+}
+
+/* 空状态 */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 120rpx 0;
+}
+
+.empty-text {
+  font-size: 28rpx;
+  color: #999999;
+}
+
+.load-more {
+  text-align: center;
+  padding: 30rpx 0;
+  font-size: 24rpx;
+  color: #999999;
+}

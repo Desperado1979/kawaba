@@ -1,0 +1,122 @@
+/* Kawaba 全局样式 — 瓦努阿图三色系 */
+
+page {
+  font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Helvetica Neue", "Microsoft YaHei", sans-serif;
+  font-size: 28rpx;
+  color: #333333;
+  background-color: #F5F5F5;
+  box-sizing: border-box;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* 色彩变量 via class */
+.text-primary { color: #CE1126; }
+.text-green { color: #009543; }
+.text-dark { color: #1A1A1A; }
+.text-gold { color: #FDCE12; }
+.text-gray { color: #999999; }
+.text-light { color: #666666; }
+
+.bg-primary { background-color: #CE1126; }
+.bg-green { background-color: #009543; }
+.bg-dark { background-color: #1A1A1A; }
+.bg-gold { background-color: #FDCE12; }
+.bg-white { background-color: #FFFFFF; }
+
+/* 通用布局 */
+.container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.flex-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.flex-col {
+  display: flex;
+  flex-direction: column;
+}
+
+.flex-between {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.flex-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.flex-wrap {
+  flex-wrap: wrap;
+}
+
+.flex-1 {
+  flex: 1;
+}
+
+/* 间距 */
+.page-padding {
+  padding: 0 24rpx;
+}
+
+.section {
+  margin-bottom: 20rpx;
+  background-color: #FFFFFF;
+  border-radius: 16rpx;
+  overflow: hidden;
+}
+
+/* 通用卡片 */
+.card {
+  background-color: #FFFFFF;
+  border-radius: 16rpx;
+  padding: 24rpx;
+  margin-bottom: 20rpx;
+}
+
+/* 分割线 */
+.divider {
+  height: 1rpx;
+  background-color: #EEEEEE;
+  width: 100%;
+}
+
+/* 安全区域底部 */
+.safe-bottom {
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+/* 文本截断 */
+.ellipsis {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ellipsis-2 {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+/* 按钮重置 */
+button {
+  background: initial;
+  padding: 0;
+  margin: 0;
+  line-height: inherit;
+  font-size: inherit;
+}
+
+button::after {
+  border: none;
+}

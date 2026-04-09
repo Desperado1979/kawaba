@@ -1,0 +1,55 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/classifieds/index",
+    "pages/yellowpage/index",
+    "pages/profile/index",
+    "pages/news-detail/index",
+    "pages/classified-detail/index",
+    "pages/business-detail/index",
+    "pages/publish/index",
+    "pages/search/index"
+  ],
+  "window": {
+    "backgroundColor": "#F5F5F5",
+    "backgroundTextStyle": "dark",
+    "navigationBarBackgroundColor": "#1A1A1A",
+    "navigationBarTitleText": "Kawaba",
+    "navigationBarTextStyle": "white"
+  },
+  "tabBar": {
+    "color": "#999999",
+    "selectedColor": "#CE1126",
+    "backgroundColor": "#ffffff",
+    "borderStyle": "black",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "text": "首页",
+        "iconPath": "images/tabbar/home.png",
+        "selectedIconPath": "images/tabbar/home-active.png"
+      },
+      {
+        "pagePath": "pages/classifieds/index",
+        "text": "分类",
+        "iconPath": "images/tabbar/classify.png",
+        "selectedIconPath": "images/tabbar/classify-active.png"
+      },
+      {
+        "pagePath": "pages/yellowpage/index",
+        "text": "黄页",
+        "iconPath": "images/tabbar/yellowpage.png",
+        "selectedIconPath": "images/tabbar/yellowpage-active.png"
+      },
+      {
+        "pagePath": "pages/profile/index",
+        "text": "我的",
+        "iconPath": "images/tabbar/profile.png",
+        "selectedIconPath": "images/tabbar/profile-active.png"
+      }
+    ]
+  },
+  "sitemapLocation": "sitemap.json",
+  "style": "v2",
+  "lazyCodeLoading": "requiredComponents"
+}

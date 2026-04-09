@@ -1,0 +1,32 @@
+<view class="page-detail">
+  <view class="article" wx:if="{{news}}">
+    <view class="article-header">
+      <text class="article-title">{{news.title}}</text>
+      <view class="article-meta">
+        <text class="meta-source">{{news.source || 'Kawaba'}}</text>
+        <text class="meta-time">{{news.timeText}}</text>
+        <text class="meta-views">{{news.view_count || 0}} 阅读</text>
+      </view>
+    </view>
+
+    <image
+      wx:if="{{news.cover_image}}"
+      class="article-cover"
+      src="{{news.cover_image}}"
+      mode="widthFix"
+    />
+
+    <view class="article-body">
+      <rich-text nodes="{{news.content || '暂无内容'}}" />
+    </view>
+  </view>
+
+  <view class="bottom-bar safe-bottom">
+    <button class="share-btn" open-type="share">
+      <text>分享</text>
+    </button>
+    <view class="fav-btn" bindtap="toggleFavorite">
+      <text>{{isFavorite ? '已收藏' : '收藏'}}</text>
+    </view>
+  </view>
+</view>

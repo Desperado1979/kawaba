@@ -1,0 +1,169 @@
+.page-home {
+  background-color: #F5F5F5;
+  min-height: 100vh;
+}
+
+/* 搜索栏 */
+.search-bar {
+  display: flex;
+  align-items: center;
+  padding: 16rpx 24rpx;
+  background-color: #CE1126;
+}
+
+.search-inner {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  background-color: rgba(255, 255, 255, 0.9);
+  border-radius: 32rpx;
+  padding: 12rpx 24rpx;
+  height: 64rpx;
+}
+
+.search-icon {
+  width: 32rpx;
+  height: 32rpx;
+  margin-right: 12rpx;
+  opacity: 0.5;
+}
+
+.search-placeholder {
+  font-size: 26rpx;
+  color: #999999;
+}
+
+.location-tag {
+  margin-left: 16rpx;
+  font-size: 24rpx;
+  color: #FFFFFF;
+  white-space: nowrap;
+}
+
+/* 轮播 */
+.banner-swiper {
+  width: 100%;
+  height: 320rpx;
+}
+
+.banner-img {
+  width: 100%;
+  height: 320rpx;
+}
+
+/* 分类 Tab */
+.tabs-scroll {
+  background-color: #FFFFFF;
+  white-space: nowrap;
+  border-bottom: 1rpx solid #EEEEEE;
+}
+
+.tabs-row {
+  display: inline-flex;
+  padding: 0 12rpx;
+}
+
+.tab-item {
+  display: inline-block;
+  padding: 20rpx 28rpx;
+  font-size: 28rpx;
+  color: #666666;
+  position: relative;
+  white-space: nowrap;
+}
+
+.tab-active {
+  color: #CE1126;
+  font-weight: 600;
+}
+
+.tab-active::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 40rpx;
+  height: 4rpx;
+  background-color: #CE1126;
+  border-radius: 2rpx;
+}
+
+/* 新闻列表 */
+.news-list {
+  padding: 16rpx 24rpx;
+}
+
+.news-card {
+  display: flex;
+  background-color: #FFFFFF;
+  border-radius: 16rpx;
+  padding: 24rpx;
+  margin-bottom: 16rpx;
+}
+
+.news-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 140rpx;
+}
+
+.news-title {
+  font-size: 30rpx;
+  color: #1A1A1A;
+  line-height: 1.5;
+  font-weight: 500;
+}
+
+.news-meta {
+  display: flex;
+  align-items: center;
+  margin-top: 16rpx;
+}
+
+.news-source {
+  font-size: 22rpx;
+  color: #CE1126;
+  margin-right: 20rpx;
+}
+
+.news-time {
+  font-size: 22rpx;
+  color: #999999;
+  margin-right: 20rpx;
+}
+
+.news-views {
+  font-size: 22rpx;
+  color: #999999;
+}
+
+.news-cover {
+  width: 200rpx;
+  height: 140rpx;
+  border-radius: 12rpx;
+  margin-left: 20rpx;
+  flex-shrink: 0;
+}
+
+/* 空状态 & 加载更多 */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 120rpx 0;
+}
+
+.empty-text {
+  font-size: 28rpx;
+  color: #999999;
+}
+
+.load-more {
+  text-align: center;
+  padding: 30rpx 0;
+  font-size: 24rpx;
+  color: #999999;
+}

@@ -1,0 +1,97 @@
+<view class="page-profile">
+  <!-- 用户信息头部 -->
+  <view class="profile-header">
+    <view class="user-section" wx:if="{{isLogin}}">
+      <image class="avatar" src="{{userInfo.avatar || '/images/icons/default-avatar.svg'}}" mode="aspectFill" />
+      <view class="user-info">
+        <text class="nickname">{{userInfo.nickname || '用户'}}</text>
+        <text class="user-id">ID: {{userInfo.openid ? userInfo.openid.substring(0, 8) + '...' : ''}}</text>
+      </view>
+    </view>
+    <view class="user-section" wx:else bindtap="onLogin">
+      <view class="avatar avatar-default">
+        <text class="avatar-placeholder">?</text>
+      </view>
+      <view class="user-info">
+        <text class="nickname">点击登录</text>
+        <text class="user-id">登录后享受更多服务</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 快捷统计 -->
+  <view class="stats-row">
+    <view class="stat-item" bindtap="goMyPublish">
+      <text class="stat-num">{{stats.published || 0}}</text>
+      <text class="stat-label">我的发布</text>
+    </view>
+    <view class="stat-item" bindtap="goMyFavorites">
+      <text class="stat-num">{{stats.favorites || 0}}</text>
+      <text class="stat-label">我的收藏</text>
+    </view>
+    <view class="stat-item" bindtap="goMyViews">
+      <text class="stat-num">{{stats.views || 0}}</text>
+      <text class="stat-label">浏览记录</text>
+    </view>
+  </view>
+
+  <!-- 功能菜单 -->
+  <view class="menu-section">
+    <view class="menu-group">
+      <view class="menu-item" bindtap="goMyPublish">
+        <view class="menu-left">
+          <view class="menu-icon-wrap bg-primary">
+            <text class="menu-icon-text">📝</text>
+          </view>
+          <text class="menu-text">我的发布</text>
+        </view>
+        <image class="menu-arrow" src="/images/arrow.svg" mode="aspectFit" />
+      </view>
+      <view class="divider"></view>
+      <view class="menu-item" bindtap="goMyFavorites">
+        <view class="menu-left">
+          <view class="menu-icon-wrap bg-gold">
+            <text class="menu-icon-text">⭐</text>
+          </view>
+          <text class="menu-text">我的收藏</text>
+        </view>
+        <image class="menu-arrow" src="/images/arrow.svg" mode="aspectFit" />
+      </view>
+      <view class="divider"></view>
+      <view class="menu-item" bindtap="goMyViews">
+        <view class="menu-left">
+          <view class="menu-icon-wrap bg-green">
+            <text class="menu-icon-text">👁️</text>
+          </view>
+          <text class="menu-text">浏览记录</text>
+        </view>
+        <image class="menu-arrow" src="/images/arrow.svg" mode="aspectFit" />
+      </view>
+    </view>
+
+    <view class="menu-group">
+      <view class="menu-item" bindtap="goFeedback">
+        <view class="menu-left">
+          <view class="menu-icon-wrap" style="background-color: #E3F2FD;">
+            <text class="menu-icon-text">💬</text>
+          </view>
+          <text class="menu-text">意见反馈</text>
+        </view>
+        <image class="menu-arrow" src="/images/arrow.svg" mode="aspectFit" />
+      </view>
+      <view class="divider"></view>
+      <view class="menu-item" bindtap="goAbout">
+        <view class="menu-left">
+          <view class="menu-icon-wrap" style="background-color: #F3E5F5;">
+            <text class="menu-icon-text">ℹ️</text>
+          </view>
+          <text class="menu-text">关于我们</text>
+        </view>
+        <image class="menu-arrow" src="/images/arrow.svg" mode="aspectFit" />
+      </view>
+    </view>
+  </view>
+
+  <!-- 版本 -->
+  <view class="version-text">Kawaba v1.0.0</view>
+</view>

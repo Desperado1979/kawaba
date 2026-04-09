@@ -1,0 +1,143 @@
+.page-detail {
+  background-color: #F5F5F5;
+  min-height: 100vh;
+  padding-bottom: 120rpx;
+}
+
+.biz-cover {
+  width: 100%;
+  height: 400rpx;
+  background-color: #EEEEEE;
+}
+
+.biz-body {
+  background-color: #FFFFFF;
+  padding: 32rpx;
+  margin-top: -40rpx;
+  border-radius: 24rpx 24rpx 0 0;
+  position: relative;
+}
+
+.biz-name {
+  font-size: 38rpx;
+  color: #1A1A1A;
+  font-weight: 600;
+}
+
+.biz-rating {
+  display: flex;
+  align-items: center;
+  margin-top: 12rpx;
+}
+
+.star {
+  font-size: 28rpx;
+  color: #FDCE12;
+}
+
+.rating-text {
+  font-size: 26rpx;
+  color: #999999;
+  margin-left: 12rpx;
+}
+
+.info-section {
+  margin-top: 24rpx;
+}
+
+.info-row {
+  display: flex;
+  align-items: center;
+  padding: 12rpx 0;
+}
+
+.info-icon {
+  width: 32rpx;
+  height: 32rpx;
+  margin-right: 12rpx;
+  flex-shrink: 0;
+}
+
+.info-text {
+  font-size: 26rpx;
+  color: #666666;
+}
+
+.phone-link {
+  color: #009543;
+}
+
+.divider {
+  height: 1rpx;
+  background-color: #EEEEEE;
+  margin: 24rpx 0;
+}
+
+.desc-section {
+  margin-top: 8rpx;
+}
+
+.desc-title {
+  font-size: 30rpx;
+  color: #1A1A1A;
+  font-weight: 500;
+  margin-bottom: 16rpx;
+  display: block;
+}
+
+.desc-content {
+  font-size: 28rpx;
+  color: #666666;
+  line-height: 1.8;
+}
+
+/* 底部栏 */
+.bottom-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+  padding: 16rpx 32rpx;
+  background-color: #FFFFFF;
+  border-top: 1rpx solid #EEEEEE;
+}
+
+.call-btn {
+  flex: 1;
+  height: 76rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #009543;
+  color: #FFFFFF;
+  font-size: 26rpx;
+  border-radius: 38rpx;
+}
+
+.nav-btn {
+  flex: 1;
+  height: 76rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #CE1126;
+  color: #FFFFFF;
+  font-size: 26rpx;
+  border-radius: 38rpx;
+}
+
+.share-btn-biz {
+  width: 76rpx;
+  height: 76rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #F5F5F5 !important;
+  color: #333333;
+  font-size: 22rpx;
+  border-radius: 38rpx;
+  padding: 0 !important;
+}

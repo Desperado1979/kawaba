@@ -1,0 +1,115 @@
+.page-detail {
+  background-color: #F5F5F5;
+  min-height: 100vh;
+  padding-bottom: 120rpx;
+}
+
+.img-swiper {
+  width: 100%;
+  height: 500rpx;
+}
+
+.img-full {
+  width: 100%;
+  height: 500rpx;
+}
+
+.detail-body {
+  background-color: #FFFFFF;
+  padding: 32rpx;
+}
+
+.detail-title {
+  font-size: 36rpx;
+  color: #1A1A1A;
+  font-weight: 600;
+  line-height: 1.5;
+}
+
+.detail-price {
+  font-size: 40rpx;
+  color: #CE1126;
+  font-weight: 700;
+  margin-top: 16rpx;
+  margin-bottom: 24rpx;
+}
+
+.info-row {
+  display: flex;
+  align-items: center;
+  padding: 16rpx 0;
+}
+
+.info-label {
+  font-size: 26rpx;
+  color: #999999;
+  width: 140rpx;
+}
+
+.info-value {
+  font-size: 26rpx;
+  color: #333333;
+  flex: 1;
+}
+
+.divider {
+  height: 1rpx;
+  background-color: #EEEEEE;
+  margin: 24rpx 0;
+}
+
+.desc-section {
+  margin-top: 8rpx;
+}
+
+.desc-title {
+  font-size: 30rpx;
+  color: #1A1A1A;
+  font-weight: 500;
+  margin-bottom: 16rpx;
+  display: block;
+}
+
+.desc-content {
+  font-size: 28rpx;
+  color: #666666;
+  line-height: 1.8;
+}
+
+/* 底部栏 */
+.bottom-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  gap: 20rpx;
+  padding: 16rpx 32rpx;
+  background-color: #FFFFFF;
+  border-top: 1rpx solid #EEEEEE;
+}
+
+.contact-btn {
+  flex: 2;
+  height: 80rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #009543;
+  color: #FFFFFF;
+  font-size: 28rpx;
+  border-radius: 40rpx;
+}
+
+.share-btn {
+  flex: 1;
+  height: 80rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #F5F5F5 !important;
+  color: #333333;
+  font-size: 28rpx;
+  border-radius: 40rpx;
+}

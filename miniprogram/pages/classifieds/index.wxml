@@ -1,0 +1,76 @@
+<view class="page-classifieds">
+  <!-- 分类 Tab -->
+  <scroll-view class="tabs-scroll" scroll-x enhanced show-scrollbar="{{false}}">
+    <view class="tabs-row">
+      <view
+        wx:for="{{categories}}"
+        wx:key="key"
+        class="tab-item {{currentCategory === item.key ? 'tab-active' : ''}}"
+        bindtap="switchCategory"
+        data-key="{{item.key}}"
+      >
+        <image class="tab-icon" src="{{item.icon}}" mode="aspectFit" />
+        <text>{{item.name}}</text>
+      </view>
+    </view>
+  </scroll-view>
+
+  <!-- 列表 -->
+  <scroll-view
+    class="list-scroll"
+    scroll-y
+    enhanced
+    bindscrolltolower="loadMore"
+  >
+    <view class="classified-list">
+      <view
+        class="classified-card"
+        wx:for="{{list}}"
+        wx:key="_id"
+        bindtap="goDetail"
+        data-id="{{item._id}}"
+      >
+        <view class="card-header">
+          <text class="card-category-tag tag-{{item.category}}">{{item.categoryName}}</text>
+          <text class="card-time">{{item.timeText}}</text>
+        </view>
+        <view class="card-title">{{item.title}}</view>
+        <view class="card-info">
+          <view class="card-price" wx:if="{{item.priceText}}">{{item.priceText}}</view>
+          <view class="card-location" wx:if="{{item.location}}">
+            <image class="loc-icon" src="/images/icons/location.svg" mode="aspectFit" />
+            <text>{{item.location}}</text>
+          </view>
+        </view>
+        <view class="card-images" wx:if="{{item.images && item.images.length > 0}}">
+          <image
+            wx:for="{{item.images}}"
+            wx:for-item="img"
+            wx:key="*this"
+            wx:if="{{index < 3}}"
+            class="card-img"
+            src="{{img}}"
+            mode="aspectFill"
+            lazy-load
+          />
+        </view>
+      </view>
+
+      <view class="empty-state" wx:if="{{!loading && list.length === 0}}">
+        <text class="empty-text">暂无信息，快来发布第一条吧</text>
+      </view>
+
+      <view class="load-more" wx:if="{{loading}}">
+        <text>加载中...</text>
+      </view>
+      <view class="load-more" wx:if="{{noMore && list.length > 0}}">
+        <text>没有更多了</text>
+      </view>
+    </view>
+  </scroll-view>
+
+  <!-- 发布按钮 -->
+  <view class="fab-btn" bindtap="goPublish">
+    <text class="fab-icon">+</text>
+  </view>
+</view>

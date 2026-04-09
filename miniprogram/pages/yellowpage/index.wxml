@@ -1,0 +1,71 @@
+<view class="page-yellowpage">
+  <!-- 搜索栏 -->
+  <view class="search-bar" bindtap="goSearch">
+    <view class="search-inner">
+      <image class="search-icon" src="/images/icons/search.svg" mode="aspectFit" />
+      <text class="search-placeholder">搜索商家名称...</text>
+    </view>
+  </view>
+
+  <!-- 分类网格 -->
+  <view class="category-grid" wx:if="{{!selectedCategory}}">
+    <view
+      class="category-item"
+      wx:for="{{categories}}"
+      wx:key="key"
+      bindtap="selectCategory"
+      data-key="{{item.key}}"
+    >
+      <view class="category-icon-wrap" style="background-color: {{item.bgColor}};">
+        <text class="category-emoji">{{item.emoji}}</text>
+      </view>
+      <text class="category-name">{{item.name}}</text>
+    </view>
+  </view>
+
+  <!-- 商家列表（选中分类后显示） -->
+  <view wx:if="{{selectedCategory}}">
+    <view class="list-header">
+      <text class="list-title">{{selectedCategoryName}}</text>
+      <text class="list-back" bindtap="backToGrid">全部分类</text>
+    </view>
+
+    <view class="business-list">
+      <view
+        class="business-card"
+        wx:for="{{list}}"
+        wx:key="_id"
+        bindtap="goDetail"
+        data-id="{{item._id}}"
+      >
+        <image
+          class="business-cover"
+          src="{{item.cover_image || '/images/icons/store-default.svg'}}"
+          mode="aspectFill"
+        />
+        <view class="business-info">
+          <view class="business-name ellipsis">{{item.name}}</view>
+          <view class="business-rating">
+            <text class="star" wx:for="{{item.stars}}" wx:for-item="s" wx:key="*this">★</text>
+            <text class="rating-num">{{item.rating || '暂无'}}</text>
+          </view>
+          <view class="business-address ellipsis">
+            <image class="loc-icon" src="/images/icons/location.svg" mode="aspectFit" />
+            <text>{{item.address || '暂无地址'}}</text>
+          </view>
+          <view class="business-phone" wx:if="{{item.phone}}">
+            <text class="phone-text">{{item.phone}}</text>
+          </view>
+        </view>
+      </view>
+
+      <view class="empty-state" wx:if="{{!loading && list.length === 0}}">
+        <text class="empty-text">暂无商家信息</text>
+      </view>
+
+      <view class="load-more" wx:if="{{loading}}">
+        <text>加载中...</text>
+      </view>
+    </view>
+  </view>
+</view>

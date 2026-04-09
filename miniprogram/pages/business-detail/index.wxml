@@ -1,0 +1,47 @@
+<view class="page-detail">
+  <view class="biz-card" wx:if="{{biz}}">
+    <image
+      class="biz-cover"
+      src="{{biz.cover_image || '/images/icons/store-default.svg'}}"
+      mode="aspectFill"
+    />
+
+    <view class="biz-body">
+      <text class="biz-name">{{biz.name}}</text>
+      <view class="biz-rating">
+        <text class="star" wx:for="{{biz.stars}}" wx:for-item="s" wx:key="*this">★</text>
+        <text class="rating-text">{{biz.rating || '暂无评分'}}</text>
+      </view>
+
+      <view class="info-section">
+        <view class="info-row" wx:if="{{biz.address}}">
+          <image class="info-icon" src="/images/icons/location.svg" mode="aspectFit" />
+          <text class="info-text">{{biz.address}}</text>
+        </view>
+        <view class="info-row" wx:if="{{biz.phone}}" bindtap="callPhone">
+          <image class="info-icon" src="/images/icons/phone.svg" mode="aspectFit" />
+          <text class="info-text phone-link">{{biz.phone}}</text>
+        </view>
+      </view>
+
+      <view class="divider"></view>
+
+      <view class="desc-section">
+        <text class="desc-title">商家简介</text>
+        <text class="desc-content">{{biz.description || '暂无简介'}}</text>
+      </view>
+    </view>
+  </view>
+
+  <view class="bottom-bar safe-bottom">
+    <view class="call-btn" bindtap="callPhone" wx:if="{{biz.phone}}">
+      <text>📞 拨打电话</text>
+    </view>
+    <view class="nav-btn" bindtap="openMap" wx:if="{{biz.address}}">
+      <text>🗺️ 导航前往</text>
+    </view>
+    <button class="share-btn-biz" open-type="share">
+      <text>分享</text>
+    </button>
+  </view>
+</view>
