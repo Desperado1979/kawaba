@@ -69,7 +69,7 @@ function parseFeed(xml, max = 12) {
 async function fetchFeedAsItems(url, sourceName, referer, max = 12) {
   const xml = await fetchHtml(url, {
     referer,
-    timeoutMs: 18000,
+    timeoutMs: 32000,
     acceptHeader: RSS_ACCEPT,
   });
   const raw = parseFeed(xml, max);

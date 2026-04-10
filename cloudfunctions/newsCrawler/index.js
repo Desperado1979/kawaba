@@ -1,4 +1,9 @@
 const cloud = require("wx-server-sdk");
+const { crawlReliefWebVanuatu } = require("./lib/sources/reliefweb_vanuatu");
+const {
+  crawlChinaDailyPacific,
+  crawlXinhuaPacific,
+} = require("./lib/sources/china_accessible_rss");
 const {
   crawlRnzPacificRss,
   crawlBbcAsiaRss,
@@ -79,8 +84,8 @@ async function upsertNews(items) {
   return { inserted, skipped, failed };
 }
 
-/** 单源墙钟上限，避免跨境站点把整段云函数拖到 60s+ */
-const PER_SOURCE_MS = 26000;
+/** 单源墙钟上限；境内 RSS + ReliefWeb 并行，总时长控制在云函数 60s 内 */
+const PER_SOURCE_MS = 34000;
 
 function cappedCrawl(ms, fn) {
   let t;
@@ -103,27 +108,41 @@ async function runCrawl() {
   // Note on “translation”:
   // We do NOT republish full translated articles (copyright risk).
   // We store a short excerpt + source link and allow later manual/AI summarization.
-  const [rnzRes, bbcRes, gRes] = await Promise.allSettled([
-    cappedCrawl(PER_SOURCE_MS, crawlRnzPacificRss),
-    cappedCrawl(PER_SOURCE_MS, crawlBbcAsiaRss),
-    cappedCrawl(PER_SOURCE_MS, crawlGoogleVanuatuRss),
-  ]);
+  const overseas = process.env.ENABLE_OVERSEAS_RSS === "1";
+  const jobs = [
+    ["reliefweb_vut", () => cappedCrawl(PER_SOURCE_MS, crawlReliefWebVanuatu)],
+    ["china_daily_pacific", () => cappedCrawl(PER_SOURCE_MS, crawlChinaDailyPacific)],
+    ["xinhua_pacific", () => cappedCrawl(PER_SOURCE_MS, crawlXinhuaPacific)],
+  ];
+  if (overseas) {
+    jobs.push(
+      ["rnz_rss", () => cappedCrawl(PER_SOURCE_MS, crawlRnzPacificRss)],
+      ["bbc_asia_rss", () => cappedCrawl(PER_SOURCE_MS, crawlBbcAsiaRss)],
+      ["google_vanuatu_rss", () => cappedCrawl(PER_SOURCE_MS, crawlGoogleVanuatuRss)]
+    );
+  }
 
+  const settled = await Promise.allSettled(jobs.map(([, fn]) => fn()));
+
+  const sources = {};
   const items = [];
-  if (rnzRes.status === "fulfilled") items.push(...rnzRes.value);
-  if (bbcRes.status === "fulfilled") items.push(...bbcRes.value);
-  if (gRes.status === "fulfilled") items.push(...gRes.value);
+  settled.forEach((r, i) => {
+    const key = jobs[i][0];
+    sources[key] = sourceStatus(r, key);
+    if (r.status === "fulfilled") items.push(...r.value);
+  });
+  if (!overseas) {
+    sources.rnz_rss = "skipped(env ENABLE_OVERSEAS_RSS!=1)";
+    sources.bbc_asia_rss = "skipped(env ENABLE_OVERSEAS_RSS!=1)";
+    sources.google_vanuatu_rss = "skipped(env ENABLE_OVERSEAS_RSS!=1)";
+  }
 
   const res = await upsertNews(items);
   return {
     success: true,
-    sources: {
-      rnz_rss: sourceStatus(rnzRes, "rnz_rss"),
-      bbc_asia_rss: sourceStatus(bbcRes, "bbc_asia_rss"),
-      google_vanuatu_rss: sourceStatus(gRes, "google_vanuatu_rss"),
-    },
+    sources,
     note:
-      "抓取已改为 RSS（RNZ Pacific + BBC Asia + Google News Vanuatu）。原 HTML 直爬 dailypost/rnz 在腾讯云出口易 403/超时，代码仍保留在 lib/sources/dailypost.js、rnz.js 供本机试验。",
+      "默认只跑 ReliefWeb(VUT)+China Daily/Xinhua(太平洋关键词)；海外 RNZ/BBC/Google 已默认关闭以免全量超时，需时在云函数环境变量设 ENABLE_OVERSEAS_RSS=1。ReliefWeb 若 4xx 请按 reliefweb.int 文档登记 appname。",
     stats: {
       fetched: items.length,
       inserted: res.inserted.length,
