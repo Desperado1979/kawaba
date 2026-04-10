@@ -2,7 +2,8 @@ const { fetchHtml } = require("../http");
 const { clampText } = require("../utils");
 const { walkAnchors, firstParagraphText } = require("../html_lite");
 
-const BASE = "https://dailypost.vu";
+/* 使用 www 与站点主站一致，部分 CDN 对裸域 / Bot UA 会 403 */
+const BASE = "https://www.dailypost.vu";
 
 function absUrl(href) {
   if (!href) return "";
@@ -12,7 +13,8 @@ function absUrl(href) {
 }
 
 async function crawlDailyPost() {
-  const html = await fetchHtml(`${BASE}/news/`);
+  const listUrl = `${BASE}/news/`;
+  const html = await fetchHtml(listUrl, { referer: `${BASE}/` });
   const items = [];
 
   const seen = new Set();
@@ -39,7 +41,7 @@ async function crawlDailyPost() {
   const detailCount = Math.min(6, items.length);
   for (let i = 0; i < detailCount; i++) {
     try {
-      const detailHtml = await fetchHtml(items[i].origin_url);
+      const detailHtml = await fetchHtml(items[i].origin_url, { referer: listUrl });
       let p = firstParagraphText(detailHtml, 30);
       if (!p) p = firstParagraphText(detailHtml, 12);
       items[i].excerpt_en = clampText(p, 240);

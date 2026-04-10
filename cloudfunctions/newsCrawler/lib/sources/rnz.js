@@ -12,7 +12,8 @@ function absUrl(href) {
 }
 
 async function crawlRnzPacific() {
-  const html = await fetchHtml(`${BASE}/international/pacific-news`);
+  const listUrl = `${BASE}/international/pacific-news`;
+  const html = await fetchHtml(listUrl, { referer: `${BASE}/` });
   const items = [];
   const seen = new Set();
 
@@ -42,7 +43,7 @@ async function crawlRnzPacific() {
   const detailCount = Math.min(6, items.length);
   for (let i = 0; i < detailCount; i++) {
     try {
-      const detailHtml = await fetchHtml(items[i].origin_url);
+      const detailHtml = await fetchHtml(items[i].origin_url, { referer: listUrl });
       let p = firstParagraphText(detailHtml, 30);
       if (!p) p = firstParagraphText(detailHtml, 12);
       items[i].excerpt_en = clampText(p, 240);
