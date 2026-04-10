@@ -46,7 +46,7 @@ function clampBatchLimit(raw) {
 /**
  * 避免复合 where + orderBy 在云库上因索引/匹配返回 0 条：先按时间拉一页，再在内存里筛。
  */
-async function fetchCandidates(batchLimit) {
+async function fetchCandidates(batchLimit, force) {
   const scanCap = Math.min(200, Math.max(40, batchLimit * 25));
   const batch = await db
     .collection("news")
@@ -54,14 +54,40 @@ async function fetchCandidates(batchLimit) {
     .limit(scanCap)
     .get();
 
-  const rows = (batch.data || []).filter((doc) => needsSummary(doc) && resolveSourceText(doc));
-  return { data: rows.slice(0, batchLimit), scanned: batch.data?.length ?? 0 };
+  const raw = batch.data || [];
+  const rows = raw.filter((doc) => {
+    const st = resolveSourceText(doc);
+    if (!st) return false;
+    if (force) return true;
+    return needsSummary(doc);
+  });
+  const data = rows.slice(0, batchLimit);
+  const explain =
+    data.length === 0 && !force && raw.length > 0 ? explainZeroCandidates(raw, false) : null;
+  return { data, scanned: raw.length, force: Boolean(force), explain };
+}
+
+/** 解释为何 0 候选（不写库，仅诊断） */
+function explainZeroCandidates(raw, force) {
+  if (force || raw.length === 0) return null;
+  let hasZh = 0;
+  let noSource = 0;
+  for (const d of raw) {
+    const st = resolveSourceText(d);
+    if (!st) {
+      noSource += 1;
+      continue;
+    }
+    if (!needsSummary(d)) hasZh += 1;
+  }
+  return { recentWithSummaryZh: hasZh, recentMissingSource: noSource, totalRecent: raw.length };
 }
 
 exports.main = async (event) => {
   const dryRun = Boolean(event?.dryRun);
+  const force = Boolean(event?.force);
   const batchLimit = clampBatchLimit(event?.limit);
-  const { data: list = [], scanned = 0 } = await fetchCandidates(batchLimit);
+  const { data: list = [], scanned = 0, explain = null } = await fetchCandidates(batchLimit, force);
 
   const updated = [];
   const skipped = [];
@@ -106,6 +132,7 @@ exports.main = async (event) => {
   return {
     success: true,
     dryRun,
+    force,
     batchLimit,
     stats: {
       scanned,
@@ -114,9 +141,10 @@ exports.main = async (event) => {
       skipped: skipped.length,
       failed: failed.length
     },
+    explain,
     sample: { updated: updated.slice(0, 3), skipped: skipped.slice(0, 3), failed: failed.slice(0, 3) },
     hint:
-      "每条串行请求 AI。默认每轮 2 条；云函数超时仍建议调到 ≥60s。要加大批量可传 {\"limit\":6} 并同步提高超时。"
+      "每条串行请求 AI。默认每轮 2 条；云函数超时 ≥60s 更稳。candidates 为 0 且已有 excerpt_zh 时属正常；要全部重跑摘要可传 force:true。例：{\"force\":true,\"limit\":2}。"
   };
 };
 
