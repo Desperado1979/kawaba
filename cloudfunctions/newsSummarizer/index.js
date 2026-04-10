@@ -105,28 +105,28 @@ exports.main = async (event) => {
     }
 
     try {
-      const zh = await summarizeToChinese({ title, sourceText, maxChars: 180 });
-      if (!zh) {
+      const { titleZh, excerptZh } = await summarizeToChinese({ title, sourceText, maxChars: 180 });
+      if (!excerptZh && !titleZh) {
         skipped.push({ _id: doc._id, reason: "empty_zh" });
         continue;
       }
 
       if (!dryRun) {
-        await db.collection("news").doc(doc._id).update({
-          data: {
-            excerpt_zh: zh,
-            content: buildContent({
-              title: doc.title,
-              excerptZh: zh,
-              originUrl: doc.origin_url,
-              source: doc.source
-            }),
-            summarized_at: new Date()
-          }
-        });
+        const updateData = {
+          excerpt_zh: excerptZh || "",
+          content: buildContent({
+            title: titleZh || doc.title,
+            excerptZh: excerptZh,
+            originUrl: doc.origin_url,
+            source: doc.source
+          }),
+          summarized_at: new Date()
+        };
+        if (titleZh) updateData.title_zh = titleZh;
+        await db.collection("news").doc(doc._id).update({ data: updateData });
       }
 
-      updated.push({ _id: doc._id, title: doc.title });
+      updated.push({ _id: doc._id, title: titleZh || doc.title });
     } catch (e) {
       failed.push({ _id: doc._id, errMsg: e.message || String(e) });
     }

@@ -60,7 +60,7 @@
       data-id="{{item._id}}"
     >
       <view class="news-content">
-        <view class="news-title ellipsis-2">{{item.title}}</view>
+        <view class="news-title ellipsis-2">{{item.title_zh || item.title}}</view>
         <view class="news-meta">
           <text class="news-source">{{item.source || 'Kavabar'}}</text>
           <text class="news-time">{{item.timeText}}</text>

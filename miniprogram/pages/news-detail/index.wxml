@@ -1,7 +1,7 @@
 <view class="page-detail">
   <view class="article" wx:if="{{news}}">
     <view class="article-header">
-      <text class="article-title">{{news.title}}</text>
+      <text class="article-title">{{news.title_zh || news.title}}</text>
       <view class="article-meta">
         <text class="meta-source">{{news.source || 'Kavabar'}}</text>
         <text class="meta-time">{{news.timeText}}</text>
