@@ -61,7 +61,9 @@ async function fetchCandidates(batchLimit, force) {
   const rows = raw.filter((doc) => {
     const st = resolveSourceText(doc);
     if (!st) return false;
-    if (force) return true;
+    if (force) {
+      return !doc.title_zh || String(doc.title_zh).trim() === "";
+    }
     return needsSummary(doc);
   });
   const data = rows.slice(0, batchLimit);
