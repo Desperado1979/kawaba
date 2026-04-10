@@ -3,7 +3,6 @@ const { summarizeToChinese } = require("./lib/openai_compat");
 
 cloud.init({ env: cloud.DYNAMIC_CURRENT_ENV });
 const db = cloud.database();
-const _ = db.command;
 
 function buildContent({ title, excerptZh, originUrl, source }) {
   const safeTitle = title || "";
@@ -27,6 +26,14 @@ function resolveSourceText(doc) {
   return plainFromContent(doc.content || "");
 }
 
+/** True if we should still generate excerpt_zh (DB 无法表达「仅空格」等边界，这里统一判断). */
+function needsSummary(doc) {
+  const zh = doc.excerpt_zh;
+  if (zh === undefined || zh === null) return true;
+  if (typeof zh === "string" && zh.trim() === "") return true;
+  return false;
+}
+
 const DEFAULT_BATCH = 2;
 const MAX_BATCH = 20;
 
@@ -36,27 +43,25 @@ function clampBatchLimit(raw) {
   return Math.min(Math.floor(n), MAX_BATCH);
 }
 
-async function fetchCandidates(limit = DEFAULT_BATCH) {
-  const needsZh = _.or([{ excerpt_zh: "" }, { excerpt_zh: _.exists(false) }]);
-  const hasSource = _.or([
-    _.and([{ excerpt_en: _.exists(true) }, { excerpt_en: _.neq("") }]),
-    _.and([{ content: _.exists(true) }, { content: _.neq("") }])
-  ]);
-  const where = _.and([needsZh, hasSource]);
-
-  return await db
+/**
+ * 避免复合 where + orderBy 在云库上因索引/匹配返回 0 条：先按时间拉一页，再在内存里筛。
+ */
+async function fetchCandidates(batchLimit) {
+  const scanCap = Math.min(200, Math.max(40, batchLimit * 25));
+  const batch = await db
     .collection("news")
-    .where(where)
     .orderBy("created_at", "desc")
-    .limit(limit)
+    .limit(scanCap)
     .get();
+
+  const rows = (batch.data || []).filter((doc) => needsSummary(doc) && resolveSourceText(doc));
+  return { data: rows.slice(0, batchLimit), scanned: batch.data?.length ?? 0 };
 }
 
 exports.main = async (event) => {
   const dryRun = Boolean(event?.dryRun);
   const batchLimit = clampBatchLimit(event?.limit);
-  const candidates = await fetchCandidates(batchLimit);
-  const list = candidates.data || [];
+  const { data: list = [], scanned = 0 } = await fetchCandidates(batchLimit);
 
   const updated = [];
   const skipped = [];
@@ -102,7 +107,13 @@ exports.main = async (event) => {
     success: true,
     dryRun,
     batchLimit,
-    stats: { candidates: list.length, updated: updated.length, skipped: skipped.length, failed: failed.length },
+    stats: {
+      scanned,
+      candidates: list.length,
+      updated: updated.length,
+      skipped: skipped.length,
+      failed: failed.length
+    },
     sample: { updated: updated.slice(0, 3), skipped: skipped.slice(0, 3), failed: failed.slice(0, 3) },
     hint:
       "每条串行请求 AI。默认每轮 2 条；云函数超时仍建议调到 ≥60s。要加大批量可传 {\"limit\":6} 并同步提高超时。"
