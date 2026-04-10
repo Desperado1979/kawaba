@@ -23,7 +23,10 @@ function plainFromContent(raw) {
 function resolveSourceText(doc) {
   const en = (doc.excerpt_en || "").trim();
   if (en) return en;
-  return plainFromContent(doc.content || "");
+  const ct = plainFromContent(doc.content || "");
+  if (ct) return ct;
+  const t = (doc.title || "").trim();
+  return t || "";
 }
 
 /** True if we should still generate excerpt_zh (DB 无法表达「仅空格」等边界，这里统一判断). */
