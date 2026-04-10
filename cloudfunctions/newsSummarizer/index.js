@@ -27,7 +27,16 @@ function resolveSourceText(doc) {
   return plainFromContent(doc.content || "");
 }
 
-async function fetchCandidates(limit = 20) {
+const DEFAULT_BATCH = 2;
+const MAX_BATCH = 20;
+
+function clampBatchLimit(raw) {
+  const n = raw === undefined || raw === null ? DEFAULT_BATCH : Number(raw);
+  if (!Number.isFinite(n) || n < 1) return DEFAULT_BATCH;
+  return Math.min(Math.floor(n), MAX_BATCH);
+}
+
+async function fetchCandidates(limit = DEFAULT_BATCH) {
   const needsZh = _.or([{ excerpt_zh: "" }, { excerpt_zh: _.exists(false) }]);
   const hasSource = _.or([
     _.and([{ excerpt_en: _.exists(true) }, { excerpt_en: _.neq("") }]),
@@ -45,7 +54,8 @@ async function fetchCandidates(limit = 20) {
 
 exports.main = async (event) => {
   const dryRun = Boolean(event?.dryRun);
-  const candidates = await fetchCandidates(20);
+  const batchLimit = clampBatchLimit(event?.limit);
+  const candidates = await fetchCandidates(batchLimit);
   const list = candidates.data || [];
 
   const updated = [];
@@ -91,8 +101,11 @@ exports.main = async (event) => {
   return {
     success: true,
     dryRun,
+    batchLimit,
     stats: { candidates: list.length, updated: updated.length, skipped: skipped.length, failed: failed.length },
-    sample: { updated: updated.slice(0, 3), skipped: skipped.slice(0, 3), failed: failed.slice(0, 3) }
+    sample: { updated: updated.slice(0, 3), skipped: skipped.slice(0, 3), failed: failed.slice(0, 3) },
+    hint:
+      "每条串行请求 AI。默认每轮 2 条；云函数超时仍建议调到 ≥60s。要加大批量可传 {\"limit\":6} 并同步提高超时。"
   };
 };
 

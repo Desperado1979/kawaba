@@ -37,7 +37,7 @@ async function summarizeToChinese({ title, sourceText, excerptEn, maxChars = 180
       temperature: 0.3
     },
     {
-      timeout: 25000,
+      timeout: 12000,
       headers: {
         Authorization: `Bearer ${apiKey}`,
         "Content-Type": "application/json"
