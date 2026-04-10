@@ -1,9 +1,7 @@
 const cloud = require("wx-server-sdk");
+const { crawlEmbassyVanuatuChina } = require("./lib/sources/embassy_vu_china");
+const { crawlChinaDailyVanuatuOnly, crawlXinhuaVanuatuOnly } = require("./lib/sources/domestic_vu_rss");
 const { crawlReliefWebVanuatu } = require("./lib/sources/reliefweb_vanuatu");
-const {
-  crawlChinaDailyPacific,
-  crawlXinhuaPacific,
-} = require("./lib/sources/china_accessible_rss");
 const {
   crawlRnzPacificRss,
   crawlBbcAsiaRss,
@@ -20,7 +18,7 @@ function toHtmlExcerpt({ title, excerpt, url, source }) {
   const safeUrl = url || "";
   const safeSource = source || "";
   const link = safeUrl
-    ? `<p><a href="${safeUrl}" target="_blank" rel="noreferrer">Source: ${safeSource || "link"}</a></p>`
+    ? `<p><a href="${safeUrl}" target="_blank" rel="noreferrer">来源: ${safeSource || "链接"}</a></p>`
     : "";
   return `<h3>${safeTitle}</h3><p>${safeExcerpt}</p>${link}`;
 }
@@ -84,8 +82,7 @@ async function upsertNews(items) {
   return { inserted, skipped, failed };
 }
 
-/** 单源墙钟上限；境内 RSS + ReliefWeb 并行，总时长控制在云函数 60s 内 */
-const PER_SOURCE_MS = 34000;
+const PER_SOURCE_MS = 28000;
 
 function cappedCrawl(ms, fn) {
   let t;
@@ -105,21 +102,16 @@ function sourceStatus(result, label) {
 }
 
 async function runCrawl() {
-  // Note on “translation”:
-  // We do NOT republish full translated articles (copyright risk).
-  // We store a short excerpt + source link and allow later manual/AI summarization.
   const overseas = process.env.ENABLE_OVERSEAS_RSS === "1";
+  const enableReliefWeb = process.env.ENABLE_RELIEFWEB === "1";
+
   const jobs = [
-    ["reliefweb_vut", () => cappedCrawl(PER_SOURCE_MS, crawlReliefWebVanuatu)],
-    ["china_daily_pacific", () => cappedCrawl(PER_SOURCE_MS, crawlChinaDailyPacific)],
-    ["xinhua_pacific", () => cappedCrawl(PER_SOURCE_MS, crawlXinhuaPacific)],
+    ["embassy_vu", () => cappedCrawl(PER_SOURCE_MS, crawlEmbassyVanuatuChina)],
+    ["chinadaily_vanuatu", () => cappedCrawl(PER_SOURCE_MS, crawlChinaDailyVanuatuOnly)],
+    ["xinhua_vanuatu", () => cappedCrawl(PER_SOURCE_MS, crawlXinhuaVanuatuOnly)],
   ];
-  if (overseas) {
-    jobs.push(
-      ["rnz_rss", () => cappedCrawl(PER_SOURCE_MS, crawlRnzPacificRss)],
-      ["bbc_asia_rss", () => cappedCrawl(PER_SOURCE_MS, crawlBbcAsiaRss)],
-      ["google_vanuatu_rss", () => cappedCrawl(PER_SOURCE_MS, crawlGoogleVanuatuRss)]
-    );
+  if (enableReliefWeb) {
+    jobs.unshift(["reliefweb_vut", () => cappedCrawl(PER_SOURCE_MS, crawlReliefWebVanuatu)]);
   }
 
   const settled = await Promise.allSettled(jobs.map(([, fn]) => fn()));
@@ -131,20 +123,45 @@ async function runCrawl() {
     sources[key] = sourceStatus(r, key);
     if (r.status === "fulfilled") items.push(...r.value);
   });
+
+  if (!enableReliefWeb) {
+    sources.reliefweb_vut = "skipped(env ENABLE_RELIEFWEB!=1)";
+  }
   if (!overseas) {
     sources.rnz_rss = "skipped(env ENABLE_OVERSEAS_RSS!=1)";
     sources.bbc_asia_rss = "skipped(env ENABLE_OVERSEAS_RSS!=1)";
     sources.google_vanuatu_rss = "skipped(env ENABLE_OVERSEAS_RSS!=1)";
+  } else {
+    const [rnzRes, bbcRes, gRes] = await Promise.allSettled([
+      cappedCrawl(PER_SOURCE_MS, crawlRnzPacificRss),
+      cappedCrawl(PER_SOURCE_MS, crawlBbcAsiaRss),
+      cappedCrawl(PER_SOURCE_MS, crawlGoogleVanuatuRss),
+    ]);
+    sources.rnz_rss = sourceStatus(rnzRes, "rnz_rss");
+    sources.bbc_asia_rss = sourceStatus(bbcRes, "bbc_asia_rss");
+    sources.google_vanuatu_rss = sourceStatus(gRes, "google_vanuatu_rss");
+    if (rnzRes.status === "fulfilled") items.push(...rnzRes.value);
+    if (bbcRes.status === "fulfilled") items.push(...bbcRes.value);
+    if (gRes.status === "fulfilled") items.push(...gRes.value);
   }
 
-  const res = await upsertNews(items);
+  const deduped = [];
+  const seenUrl = new Set();
+  for (const it of items) {
+    const u = (it.origin_url || "").trim();
+    if (!u || seenUrl.has(u)) continue;
+    seenUrl.add(u);
+    deduped.push(it);
+  }
+
+  const res = await upsertNews(deduped);
   return {
     success: true,
     sources,
     note:
-      "默认只跑 ReliefWeb(VUT)+China Daily/Xinhua(太平洋关键词)；海外 RNZ/BBC/Google 已默认关闭以免全量超时，需时在云函数环境变量设 ENABLE_OVERSEAS_RSS=1。ReliefWeb 若 4xx 请按 reliefweb.int 文档登记 appname。",
+      "新闻为点缀：使馆动态 + 仅含瓦努阿图关键词的近期门户稿。ReliefWeb 默认关（ENABLE_RELIEFWEB=1）；海外 RSS 默认关（ENABLE_OVERSEAS_RSS=1）。",
     stats: {
-      fetched: items.length,
+      fetched: deduped.length,
       inserted: res.inserted.length,
       skipped: res.skipped.length,
       failed: res.failed.length,
@@ -158,10 +175,8 @@ async function runCrawl() {
 }
 
 exports.main = async (event) => {
-  // Manual run: callFunction({name:'newsCrawler', data:{type:'run'}})
   if (event?.type && event.type !== "run") {
     return { success: false, message: `unknown type: ${event.type}` };
   }
   return await runCrawl();
 };
-

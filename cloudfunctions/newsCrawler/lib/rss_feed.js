@@ -31,8 +31,14 @@ function parseRssItems(xml, max) {
     }
     const rawDesc = innerTag(b, "description") || innerTag(b, "summary") || innerTag(b, "content:encoded");
     const desc = clampText(textFromHtml(rawDesc), 400);
+    let pubMs = null;
+    const pd = innerTag(b, "pubDate");
+    if (pd) {
+      const t = Date.parse(pd);
+      if (!Number.isNaN(t)) pubMs = t;
+    }
     if (title.length > 8 && link.startsWith("http")) {
-      items.push({ title, link, desc });
+      items.push({ title, link, desc, pubMs });
     }
   }
   return items;
@@ -49,8 +55,14 @@ function parseAtomEntries(xml, max) {
     const link = lm ? lm[1].trim() : "";
     const rawSum = innerTag(b, "summary") || innerTag(b, "content");
     const desc = clampText(textFromHtml(rawSum), 400);
+    let pubMs = null;
+    const updated = innerTag(b, "updated");
+    if (updated) {
+      const t = Date.parse(updated);
+      if (!Number.isNaN(t)) pubMs = t;
+    }
     if (title.length > 5 && link.startsWith("http")) {
-      items.push({ title, link, desc });
+      items.push({ title, link, desc, pubMs });
     }
   }
   return items;
@@ -83,7 +95,7 @@ async function fetchFeedAsItems(url, sourceName, referer, max = 12) {
     source: sourceName,
     category: "local",
     cover_image: "",
-    created_at: new Date(),
+    created_at: r.pubMs != null ? new Date(r.pubMs) : new Date(),
     is_top: false,
   }));
 }
