@@ -60,10 +60,19 @@ Page({
 
     try {
       const res = await api.getNewsList(this.data.currentCategory, this.data.page);
-      const list = (res.data || []).map(item => ({
-        ...item,
-        timeText: util.formatTime(item.created_at)
-      }));
+      const list = (res.data || []).map((item) => {
+        const raw = item.created_at;
+        const d =
+          raw instanceof Date
+            ? raw
+            : typeof raw === "string" || typeof raw === "number"
+              ? new Date(raw)
+              : null;
+        return {
+          ...item,
+          timeText: d && !Number.isNaN(d.getTime()) ? util.formatTime(d) : ""
+        };
+      });
 
       this.setData({
         newsList: this.data.page === 0 ? list : [...this.data.newsList, ...list],

@@ -74,11 +74,23 @@ module.exports = {
   },
 
   getNewsList(category, page = 0) {
-    let query = db.collection("news").orderBy("created_at", "desc");
+    // 须先 where 再 orderBy；先前写法在非「全部」时可能报错，触发首页 loadMockNews 假数据。
+    let query = db.collection("news");
     if (category && category !== "all") {
-      query = query.where({ category });
+      /* 使馆稿 category 为 chinese：在「本地新闻」里也展示，避免用户切到本地 tab 看不到新抓的使馆动态 */
+      if (category === "local") {
+        query = query.where(
+          _.or([{ category: "local" }, { source: "中国驻瓦努阿图使馆" }])
+        );
+      } else {
+        query = query.where({ category });
+      }
     }
-    return query.skip(page * PAGE_SIZE).limit(PAGE_SIZE).get();
+    return query
+      .orderBy("created_at", "desc")
+      .skip(page * PAGE_SIZE)
+      .limit(PAGE_SIZE)
+      .get();
   },
 
   getNewsDetail(id) {
