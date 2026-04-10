@@ -19,7 +19,8 @@ function defaultReferer(url) {
  */
 async function fetchHtml(url, opts = {}) {
   const referer = opts.referer || defaultReferer(url);
-  const timeout = opts.timeoutMs ?? 30000;
+  /* 云函数总时长有限；单次请求不宜过长，避免 6 串行详情把整段跑满 60s+ */
+  const timeout = opts.timeoutMs ?? 10000;
 
   const config = {
     timeout,
@@ -41,23 +42,8 @@ async function fetchHtml(url, opts = {}) {
     validateStatus: (s) => s >= 200 && s < 400,
   };
 
-  let lastErr;
-  for (let attempt = 0; attempt < 2; attempt++) {
-    try {
-      const res = await axios.get(url, config);
-      return res.data;
-    } catch (e) {
-      lastErr = e;
-      const msg = e.message || "";
-      const isTimeout = msg.includes("timeout") || e.code === "ECONNABORTED";
-      if (attempt === 0 && isTimeout) {
-        await new Promise((r) => setTimeout(r, 800));
-        continue;
-      }
-      throw e;
-    }
-  }
-  throw lastErr;
+  const res = await axios.get(url, config);
+  return res.data;
 }
 
 module.exports = { fetchHtml };

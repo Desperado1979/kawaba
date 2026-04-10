@@ -11,6 +11,16 @@ function absUrl(href) {
   return BASE + "/" + href;
 }
 
+async function fetchDetailExcerpt(item, listUrl) {
+  try {
+    const detailHtml = await fetchHtml(item.origin_url, { referer: listUrl });
+    let p = firstParagraphText(detailHtml, 30);
+    if (!p) p = firstParagraphText(detailHtml, 12);
+    item.excerpt_en = clampText(p, 240);
+    item.excerpt_zh = item.excerpt_en ? `英文摘要：${item.excerpt_en}` : "";
+  } catch (_) {}
+}
+
 async function crawlRnzPacific() {
   const listUrl = `${BASE}/international/pacific-news`;
   const html = await fetchHtml(listUrl, { referer: `${BASE}/` });
@@ -37,19 +47,11 @@ async function crawlRnzPacific() {
       created_at: new Date(),
       is_top: false,
     });
-    if (items.length >= 12) break;
+    if (items.length >= 10) break;
   }
 
-  const detailCount = Math.min(6, items.length);
-  for (let i = 0; i < detailCount; i++) {
-    try {
-      const detailHtml = await fetchHtml(items[i].origin_url, { referer: listUrl });
-      let p = firstParagraphText(detailHtml, 30);
-      if (!p) p = firstParagraphText(detailHtml, 12);
-      items[i].excerpt_en = clampText(p, 240);
-      items[i].excerpt_zh = items[i].excerpt_en ? `英文摘要：${items[i].excerpt_en}` : "";
-    } catch (_) {}
-  }
+  const detailCount = Math.min(3, items.length);
+  await Promise.all(items.slice(0, detailCount).map((item) => fetchDetailExcerpt(item, listUrl)));
 
   return items;
 }

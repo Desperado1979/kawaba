@@ -76,21 +76,45 @@ async function upsertNews(items) {
   return { inserted, skipped, failed };
 }
 
+/** 单源墙钟上限，避免跨境站点把整段云函数拖到 60s+ */
+const PER_SOURCE_MS = 26000;
+
+function cappedCrawl(ms, fn) {
+  let t;
+  const cap = new Promise((_, rej) => {
+    t = setTimeout(() => rej(new Error(`exceeded ${ms}ms`)), ms);
+  });
+  return Promise.race([fn(), cap]).finally(() => clearTimeout(t));
+}
+
+function sourceStatus(result, label) {
+  if (result.status !== "fulfilled") {
+    return `fail: ${result.reason?.message || result.reason || label}`;
+  }
+  const arr = result.value;
+  if (!Array.isArray(arr) || arr.length === 0) return "empty";
+  return "ok";
+}
+
 async function runCrawl() {
   // Note on “translation”:
   // We do NOT republish full translated articles (copyright risk).
   // We store a short excerpt + source link and allow later manual/AI summarization.
-  const [dp, rnz] = await Promise.allSettled([crawlDailyPost(), crawlRnzPacific()]);
+  const [dpRes, rnzRes] = await Promise.allSettled([
+    cappedCrawl(PER_SOURCE_MS, crawlDailyPost),
+    cappedCrawl(PER_SOURCE_MS, crawlRnzPacific),
+  ]);
+
   const items = [];
-  if (dp.status === "fulfilled") items.push(...dp.value);
-  if (rnz.status === "fulfilled") items.push(...rnz.value);
+  if (dpRes.status === "fulfilled") items.push(...dpRes.value);
+  if (rnzRes.status === "fulfilled") items.push(...rnzRes.value);
 
   const res = await upsertNews(items);
   return {
     success: true,
     sources: {
-      dailypost: dp.status === "fulfilled" ? "ok" : `fail: ${dp.reason?.message || dp.reason}`,
-      rnz: rnz.status === "fulfilled" ? "ok" : `fail: ${rnz.reason?.message || rnz.reason}`,
+      dailypost: sourceStatus(dpRes, "dailypost"),
+      rnz: sourceStatus(rnzRes, "rnz"),
     },
     stats: {
       fetched: items.length,
