@@ -37,7 +37,7 @@ function needsSummary(doc) {
   return false;
 }
 
-const DEFAULT_BATCH = 2;
+const DEFAULT_BATCH = 8;
 const MAX_BATCH = 20;
 
 function clampBatchLimit(raw) {
