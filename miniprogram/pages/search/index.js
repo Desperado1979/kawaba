@@ -35,19 +35,19 @@ Page({
     try {
       const [newsRes, classRes, bizRes] = await Promise.all([
         db.collection("news")
-          .where({ title: regex })
+          .where(db.command.or([{ title: regex }, { title_zh: regex }]))
           .orderBy("created_at", "desc")
           .limit(10)
           .get()
           .catch(() => ({ data: [] })),
         db.collection("classifieds")
-          .where({ title: regex })
+          .where(db.command.or([{ title: regex }, { description: regex }]))
           .orderBy("created_at", "desc")
           .limit(10)
           .get()
           .catch(() => ({ data: [] })),
         db.collection("businesses")
-          .where({ name: regex })
+          .where(db.command.or([{ name: regex }, { description: regex }]))
           .limit(10)
           .get()
           .catch(() => ({ data: [] }))
