@@ -107,27 +107,34 @@
   color: #333333;
 }
 
+/* 分组标题 */
+.group-title {
+  font-size: 30rpx;
+  font-weight: 700;
+  color: #333333;
+  padding: 24rpx 24rpx 12rpx;
+}
+
 /* 搜索结果 */
 .results {
-  padding: 16rpx 24rpx;
+  padding: 0 0 24rpx;
 }
 
 .result-item {
   background-color: #FFFFFF;
-  border-radius: 12rpx;
   padding: 24rpx;
-  margin-bottom: 12rpx;
+  border-bottom: 1rpx solid #F0F0F0;
 }
 
 .result-title {
-  font-size: 30rpx;
+  font-size: 32rpx;
   color: #1A1A1A;
   font-weight: 500;
   display: block;
 }
 
 .result-desc {
-  font-size: 24rpx;
+  font-size: 26rpx;
   color: #999999;
   margin-top: 8rpx;
   display: block;

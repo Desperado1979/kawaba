@@ -5,7 +5,7 @@
       <image class="search-icon" src="/images/icons/search.svg" mode="aspectFit" />
       <input
         class="search-input"
-        placeholder="搜索新闻、分类信息、商家..."
+        placeholder="搜索分类信息、商家、新闻..."
         confirm-type="search"
         focus="{{true}}"
         bindinput="onInput"
@@ -15,25 +15,6 @@
       <text class="clear-btn" wx:if="{{keyword}}" bindtap="clearKeyword">×</text>
     </view>
     <text class="cancel-btn" bindtap="goBack">取消</text>
-  </view>
-
-  <!-- 搜索类型 Tab -->
-  <view class="type-tabs" wx:if="{{hasSearched}}">
-    <view
-      class="type-tab {{searchType === 'news' ? 'type-active' : ''}}"
-      bindtap="switchType"
-      data-type="news"
-    >新闻</view>
-    <view
-      class="type-tab {{searchType === 'classifieds' ? 'type-active' : ''}}"
-      bindtap="switchType"
-      data-type="classifieds"
-    >分类信息</view>
-    <view
-      class="type-tab {{searchType === 'businesses' ? 'type-active' : ''}}"
-      bindtap="switchType"
-      data-type="businesses"
-    >商家</view>
   </view>
 
   <!-- 热搜（未搜索时显示） -->
@@ -52,17 +33,58 @@
 
   <!-- 搜索结果 -->
   <view class="results" wx:if="{{hasSearched}}">
-    <view class="result-item" wx:for="{{results}}" wx:key="_id" bindtap="goDetail" data-item="{{item}}">
-      <text class="result-title">{{item.title || item.name}}</text>
-      <text class="result-desc ellipsis">{{item.description || item.content || item.address || ''}}</text>
-    </view>
-
-    <view class="empty-state" wx:if="{{!loading && results.length === 0}}">
-      <text class="empty-text">未找到相关内容</text>
-    </view>
-
     <view class="load-more" wx:if="{{loading}}">
       <text>搜索中...</text>
+    </view>
+
+    <!-- 分类信息 -->
+    <view wx:if="{{classifiedResults.length > 0}}">
+      <view class="group-title">📋 分类信息</view>
+      <view
+        class="result-item"
+        wx:for="{{classifiedResults}}"
+        wx:key="_id"
+        bindtap="goClassifiedDetail"
+        data-id="{{item._id}}"
+      >
+        <text class="result-title">{{item.title}}</text>
+        <text class="result-desc ellipsis">{{item.description || ''}}</text>
+      </view>
+    </view>
+
+    <!-- 商家 -->
+    <view wx:if="{{bizResults.length > 0}}">
+      <view class="group-title">📒 黄页商家</view>
+      <view
+        class="result-item"
+        wx:for="{{bizResults}}"
+        wx:key="_id"
+        bindtap="goBizDetail"
+        data-id="{{item._id}}"
+      >
+        <text class="result-title">{{item.name}}</text>
+        <text class="result-desc ellipsis">{{item.address || ''}} · {{item.phone || ''}}</text>
+      </view>
+    </view>
+
+    <!-- 新闻 -->
+    <view wx:if="{{newsResults.length > 0}}">
+      <view class="group-title">📰 新闻资讯</view>
+      <view
+        class="result-item"
+        wx:for="{{newsResults}}"
+        wx:key="_id"
+        bindtap="goNewsDetail"
+        data-id="{{item._id}}"
+      >
+        <text class="result-title">{{item.title_zh || item.title}}</text>
+        <text class="result-desc ellipsis">{{item.source || 'Kavabar'}}</text>
+      </view>
+    </view>
+
+    <!-- 空 -->
+    <view class="empty-state" wx:if="{{!loading && newsResults.length === 0 && classifiedResults.length === 0 && bizResults.length === 0}}">
+      <text class="empty-text">未找到相关内容</text>
     </view>
   </view>
 </view>
