@@ -49,5 +49,9 @@ Page({
       title: this.data.item?.title || "分类信息",
       path: `/pages/classified-detail/index?id=${this.data.id}`
     };
+  },
+
+  onShareTimeline() {
+    return { title: this.data.item?.title || "Kavabar 分类信息" };
   }
 });

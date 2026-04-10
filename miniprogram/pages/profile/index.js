@@ -87,5 +87,16 @@ Page({
       this.setData({ versionTapCount: 0 });
       wx.navigateTo({ url: "/pages/admin/index" });
     }
+  },
+
+  onShareAppMessage() {
+    return {
+      title: "Kavabar 瓦努阿图华人社区",
+      path: "/pages/index/index"
+    };
+  },
+
+  onShareTimeline() {
+    return { title: "Kavabar 瓦努阿图华人社区" };
   }
 });

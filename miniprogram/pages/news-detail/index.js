@@ -45,9 +45,16 @@ Page({
   },
 
   onShareAppMessage() {
+    const t = this.data.news?.title_zh || this.data.news?.title || "Kavabar 新闻";
     return {
-      title: this.data.news?.title || "Kavabar 新闻",
+      title: t,
       path: `/pages/news-detail/index?id=${this.data.id}`
+    };
+  },
+
+  onShareTimeline() {
+    return {
+      title: this.data.news?.title_zh || this.data.news?.title || "Kavabar 新闻"
     };
   }
 });

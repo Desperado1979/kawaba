@@ -60,6 +60,7 @@ Page({
 
     try {
       const res = await api.getNewsList(this.data.currentCategory, this.data.page);
+      console.log("[loadNews] category:", this.data.currentCategory, "page:", this.data.page, "result count:", (res.data || []).length, "first:", res.data?.[0]?.title);
       const list = (res.data || []).map((item) => {
         const raw = item.created_at;
         const d =
@@ -162,6 +163,19 @@ Page({
   }
 
   ,
+
+  onShareAppMessage() {
+    return {
+      title: "Kavabar 瓦努阿图华人社区",
+      path: "/pages/index/index"
+    };
+  },
+
+  onShareTimeline() {
+    return {
+      title: "Kavabar 瓦努阿图华人社区"
+    };
+  },
 
   async onCleanupDemoNews() {
     wx.showModal({

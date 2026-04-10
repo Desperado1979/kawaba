@@ -135,5 +135,16 @@ Page({
 
   goPublish() {
     wx.navigateTo({ url: "/pages/publish/index" });
+  },
+
+  onShareAppMessage() {
+    return {
+      title: "Kavabar 分类信息 — 瓦努阿图华人社区",
+      path: "/pages/classifieds/index"
+    };
+  },
+
+  onShareTimeline() {
+    return { title: "Kavabar 分类信息 — 瓦努阿图华人社区" };
   }
 });

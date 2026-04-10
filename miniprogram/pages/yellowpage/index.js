@@ -112,5 +112,16 @@ Page({
 
   goBusinessSubmit() {
     wx.navigateTo({ url: "/pages/business-submit/index" });
+  },
+
+  onShareAppMessage() {
+    return {
+      title: "Kavabar 黄页 — 瓦努阿图华人商家",
+      path: "/pages/yellowpage/index"
+    };
+  },
+
+  onShareTimeline() {
+    return { title: "Kavabar 黄页 — 瓦努阿图华人商家" };
   }
 });

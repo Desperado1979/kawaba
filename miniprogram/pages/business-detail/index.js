@@ -57,5 +57,9 @@ Page({
       title: this.data.biz?.name || "商家推荐",
       path: `/pages/business-detail/index?id=${this.data.id}`
     };
+  },
+
+  onShareTimeline() {
+    return { title: this.data.biz?.name || "Kavabar 商家推荐" };
   }
 });
