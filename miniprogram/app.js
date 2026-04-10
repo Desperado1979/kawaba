@@ -17,5 +17,32 @@ App({
       env: this.globalData.env,
       traceUser: true
     });
+
+    this.checkUpdate();
+  },
+
+  checkUpdate() {
+    if (!wx.canIUse("getUpdateManager")) return;
+    const mgr = wx.getUpdateManager();
+    mgr.onCheckForUpdate((res) => {
+      if (res.hasUpdate) {
+        mgr.onUpdateReady(() => {
+          wx.showModal({
+            title: "发现新版本",
+            content: "新版本已下载，是否立即重启？",
+            success(r) {
+              if (r.confirm) mgr.applyUpdate();
+            }
+          });
+        });
+        mgr.onUpdateFailed(() => {
+          wx.showModal({
+            title: "更新提示",
+            content: "新版本下载失败，请删除小程序后重新打开",
+            showCancel: false
+          });
+        });
+      }
+    });
   }
 });
