@@ -1,4 +1,5 @@
 const cloud = require("wx-server-sdk");
+const { crawlVbtcRss } = require("./lib/sources/vbtc_rss");
 const { crawlEmbassyVanuatuChina } = require("./lib/sources/embassy_vu_china");
 const { crawlChinaDailyVanuatuOnly, crawlXinhuaVanuatuOnly } = require("./lib/sources/domestic_vu_rss");
 const { crawlReliefWebVanuatu } = require("./lib/sources/reliefweb_vanuatu");
@@ -106,6 +107,7 @@ async function runCrawl() {
   const enableReliefWeb = process.env.ENABLE_RELIEFWEB === "1";
 
   const jobs = [
+    ["vbtc_local", () => cappedCrawl(PER_SOURCE_MS, crawlVbtcRss)],
     ["embassy_vu", () => cappedCrawl(PER_SOURCE_MS, crawlEmbassyVanuatuChina)],
     ["chinadaily_vanuatu", () => cappedCrawl(PER_SOURCE_MS, crawlChinaDailyVanuatuOnly)],
     ["xinhua_vanuatu", () => cappedCrawl(PER_SOURCE_MS, crawlXinhuaVanuatuOnly)],
