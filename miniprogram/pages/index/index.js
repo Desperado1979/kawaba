@@ -116,8 +116,16 @@ Page({
     wx.navigateTo({ url: "/pages/search/index" });
   },
 
-  goClassifieds() {
-    wx.switchTab({ url: "/pages/classifieds/index" });
+  goCategory(e) {
+    const { type, cat } = e.currentTarget.dataset;
+    const app = getApp();
+    if (type === "classifieds") {
+      app.globalData.pendingClassifiedCat = cat;
+      wx.switchTab({ url: "/pages/classifieds/index" });
+    } else if (type === "yellowpage") {
+      app.globalData.pendingYellowpageCat = cat;
+      wx.switchTab({ url: "/pages/yellowpage/index" });
+    }
   },
 
   goYellowPage() {

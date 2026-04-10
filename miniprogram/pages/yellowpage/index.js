@@ -26,6 +26,25 @@ Page({
     noMore: false
   },
 
+  onShow() {
+    const app = getApp();
+    const pending = app.globalData.pendingYellowpageCat;
+    if (pending) {
+      app.globalData.pendingYellowpageCat = null;
+      const cat = CATEGORIES.find(c => c.key === pending);
+      if (cat && pending !== this.data.selectedCategory) {
+        this.setData({
+          selectedCategory: pending,
+          selectedCategoryName: cat.name,
+          page: 0,
+          list: [],
+          noMore: false
+        });
+        this.loadList();
+      }
+    }
+  },
+
   onPullDownRefresh() {
     if (this.data.selectedCategory) {
       this.setData({ page: 0, list: [] });

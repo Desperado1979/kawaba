@@ -29,6 +29,18 @@ Page({
     this.loadList();
   },
 
+  onShow() {
+    const app = getApp();
+    const pending = app.globalData.pendingClassifiedCat;
+    if (pending) {
+      app.globalData.pendingClassifiedCat = null;
+      if (pending !== this.data.currentCategory) {
+        this.setData({ currentCategory: pending, page: 0, list: [], noMore: false });
+        this.loadList();
+      }
+    }
+  },
+
   onPullDownRefresh() {
     this.setData({ page: 0, noMore: false, list: [] });
     this.loadList().then(() => wx.stopPullDownRefresh());

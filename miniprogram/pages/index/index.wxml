@@ -8,39 +8,52 @@
     <text class="location-tag">瓦努阿图</text>
   </view>
 
-  <!-- 轮播 Banner -->
-  <swiper class="banner-swiper" indicator-dots autoplay circular interval="{{4000}}" duration="{{500}}">
-    <swiper-item wx:for="{{banners}}" wx:key="id">
-      <view class="banner-wrap" bindtap="onBannerTap" data-item="{{item}}">
-        <image class="banner-img" src="{{item.image}}" mode="aspectFill" />
-        <view class="banner-title-overlay" wx:if="{{item.title}}">
-          <text class="banner-title-text">{{item.title}}</text>
-        </view>
-      </view>
-    </swiper-item>
-  </swiper>
-
-  <!-- 功能入口宫格 -->
+  <!-- 功能入口宫格 — 两排五列 -->
   <view class="quick-grid">
-    <view class="quick-item" bindtap="goClassifieds">
-      <view class="quick-icon icon-classifieds">📋</view>
-      <text class="quick-label">分类信息</text>
+    <view class="quick-item" bindtap="goCategory" data-type="classifieds" data-cat="rent">
+      <view class="quick-icon" style="background-color:#FFF3E0;">🏠</view>
+      <text class="quick-label">房屋租赁</text>
+    </view>
+    <view class="quick-item" bindtap="goCategory" data-type="classifieds" data-cat="job">
+      <view class="quick-icon" style="background-color:#E3F2FD;">💼</view>
+      <text class="quick-label">求职招聘</text>
+    </view>
+    <view class="quick-item" bindtap="goCategory" data-type="classifieds" data-cat="secondhand">
+      <view class="quick-icon" style="background-color:#E8F5E9;">🔄</view>
+      <text class="quick-label">二手交易</text>
+    </view>
+    <view class="quick-item" bindtap="goCategory" data-type="classifieds" data-cat="service">
+      <view class="quick-icon" style="background-color:#F3E5F5;">🛠️</view>
+      <text class="quick-label">生活服务</text>
     </view>
     <view class="quick-item" bindtap="goYellowPage">
-      <view class="quick-icon icon-yp">📒</view>
+      <view class="quick-icon" style="background-color:#FFF8E1;">📒</view>
       <text class="quick-label">黄页商家</text>
     </view>
+
+    <view class="quick-item" bindtap="goCategory" data-type="yellowpage" data-cat="food">
+      <view class="quick-icon" style="background-color:#FFF3E0;">🍜</view>
+      <text class="quick-label">餐饮美食</text>
+    </view>
+    <view class="quick-item" bindtap="goCategory" data-type="yellowpage" data-cat="car">
+      <view class="quick-icon" style="background-color:#E0F7FA;">🚗</view>
+      <text class="quick-label">汽车服务</text>
+    </view>
+    <view class="quick-item" bindtap="goCategory" data-type="yellowpage" data-cat="legal">
+      <view class="quick-icon" style="background-color:#F3E5F5;">⚖️</view>
+      <text class="quick-label">法律移民</text>
+    </view>
     <view class="quick-item" bindtap="goPublish">
-      <view class="quick-icon icon-publish">✏️</view>
+      <view class="quick-icon" style="background-color:#E8F5E9;">✏️</view>
       <text class="quick-label">发布信息</text>
     </view>
     <view class="quick-item" bindtap="goMyClassifieds">
-      <view class="quick-icon icon-my">📌</view>
+      <view class="quick-icon" style="background-color:#FCE4EC;">📌</view>
       <text class="quick-label">我的发布</text>
     </view>
   </view>
 
-  <!-- 数据初始化入口（云数据库无数据时显示） -->
+  <!-- 数据初始化入口 -->
   <view class="init-section" wx:if="{{!dataReady}}">
     <view class="init-btn" bindtap="onInitData">
       <text>一键写入示例数据</text>
@@ -48,7 +61,7 @@
     <text class="init-tip">请先在云开发控制台创建集合: news, classifieds, businesses, users</text>
   </view>
 
-  <!-- 最新资讯标题 -->
+  <!-- 最新资讯 -->
   <view class="section-header">
     <text class="section-title">最新资讯</text>
     <view class="tabs-inline">
@@ -73,7 +86,6 @@
     >
       <view class="news-content">
         <view class="news-title ellipsis-2">{{item.title_zh || item.title}}</view>
-        <view class="news-excerpt" wx:if="{{item.excerpt_zh}}">{{item.excerpt_zh}}</view>
         <view class="news-meta">
           <text class="news-source">{{item.source || 'Kavabar'}}</text>
           <text class="news-time">{{item.timeText}}</text>
@@ -88,12 +100,9 @@
       />
     </view>
 
-    <!-- 空状态 -->
     <view class="empty-state" wx:if="{{!loading && newsList.length === 0}}">
       <text class="empty-text">暂无资讯</text>
     </view>
-
-    <!-- 加载更多 -->
     <view class="load-more" wx:if="{{loading}}">
       <text>加载中...</text>
     </view>
