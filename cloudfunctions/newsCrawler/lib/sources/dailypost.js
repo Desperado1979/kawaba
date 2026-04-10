@@ -1,8 +1,7 @@
-const cheerio = require("cheerio");
 const { fetchHtml } = require("../http");
 const { clampText } = require("../utils");
+const { walkAnchors, firstParagraphText } = require("../html_lite");
 
-// Best-effort scraping. Selectors may change; we fail gracefully.
 const BASE = "https://dailypost.vu";
 
 function absUrl(href) {
@@ -14,28 +13,16 @@ function absUrl(href) {
 
 async function crawlDailyPost() {
   const html = await fetchHtml(`${BASE}/news/`);
-  const $ = cheerio.load(html);
-
   const items = [];
 
-  // Try common article-card patterns.
-  const candidates = $("a")
-    .map((_, a) => {
-      const href = $(a).attr("href");
-      const text = $(a).text();
-      return { href, text };
-    })
-    .get()
-    .filter((x) => x.href && String(x.href).includes("/news/") && x.text && x.text.trim().length > 15);
-
-  // De-dupe by href.
   const seen = new Set();
-  for (const c of candidates) {
-    const url = absUrl(c.href);
+  for (const { href, text } of walkAnchors(html)) {
+    if (!href || !String(href).includes("/news/") || !text || text.trim().length < 15) continue;
+    const url = absUrl(href);
     if (seen.has(url)) continue;
     seen.add(url);
     items.push({
-      title: clampText(c.text, 120),
+      title: clampText(text, 120),
       excerpt_en: "",
       excerpt_zh: "",
       origin_url: url,
@@ -49,15 +36,13 @@ async function crawlDailyPost() {
     if (items.length >= 12) break;
   }
 
-  // Optional: fetch detail for first few to get excerpt.
   const detailCount = Math.min(6, items.length);
   for (let i = 0; i < detailCount; i++) {
     try {
       const detailHtml = await fetchHtml(items[i].origin_url);
-      const $$ = cheerio.load(detailHtml);
-      const p = $$(".article-content p").first().text() || $$("p").first().text();
+      let p = firstParagraphText(detailHtml, 30);
+      if (!p) p = firstParagraphText(detailHtml, 12);
       items[i].excerpt_en = clampText(p, 240);
-      // “translation” policy: only generate a short Chinese summary placeholder
       items[i].excerpt_zh = items[i].excerpt_en ? `英文摘要：${items[i].excerpt_en}` : "";
     } catch (_) {
       // ignore
@@ -68,4 +53,3 @@ async function crawlDailyPost() {
 }
 
 module.exports = { crawlDailyPost };
-

@@ -14,7 +14,6 @@
   "license": "ISC",
   "dependencies": {
     "axios": "^1.15.0",
-    "cheerio": "^1.2.0",
     "wx-server-sdk": "^3.0.4"
   }
 }
