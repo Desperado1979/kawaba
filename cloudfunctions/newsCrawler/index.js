@@ -1,6 +1,9 @@
 const cloud = require("wx-server-sdk");
-const { crawlDailyPost } = require("./lib/sources/dailypost");
-const { crawlRnzPacific } = require("./lib/sources/rnz");
+const {
+  crawlRnzPacificRss,
+  crawlBbcAsiaRss,
+  crawlGoogleVanuatuRss,
+} = require("./lib/sources/rss_sources");
 const { md5 } = require("./lib/utils");
 
 cloud.init({ env: cloud.DYNAMIC_CURRENT_ENV });
@@ -100,22 +103,27 @@ async function runCrawl() {
   // Note on “translation”:
   // We do NOT republish full translated articles (copyright risk).
   // We store a short excerpt + source link and allow later manual/AI summarization.
-  const [dpRes, rnzRes] = await Promise.allSettled([
-    cappedCrawl(PER_SOURCE_MS, crawlDailyPost),
-    cappedCrawl(PER_SOURCE_MS, crawlRnzPacific),
+  const [rnzRes, bbcRes, gRes] = await Promise.allSettled([
+    cappedCrawl(PER_SOURCE_MS, crawlRnzPacificRss),
+    cappedCrawl(PER_SOURCE_MS, crawlBbcAsiaRss),
+    cappedCrawl(PER_SOURCE_MS, crawlGoogleVanuatuRss),
   ]);
 
   const items = [];
-  if (dpRes.status === "fulfilled") items.push(...dpRes.value);
   if (rnzRes.status === "fulfilled") items.push(...rnzRes.value);
+  if (bbcRes.status === "fulfilled") items.push(...bbcRes.value);
+  if (gRes.status === "fulfilled") items.push(...gRes.value);
 
   const res = await upsertNews(items);
   return {
     success: true,
     sources: {
-      dailypost: sourceStatus(dpRes, "dailypost"),
-      rnz: sourceStatus(rnzRes, "rnz"),
+      rnz_rss: sourceStatus(rnzRes, "rnz_rss"),
+      bbc_asia_rss: sourceStatus(bbcRes, "bbc_asia_rss"),
+      google_vanuatu_rss: sourceStatus(gRes, "google_vanuatu_rss"),
     },
+    note:
+      "抓取已改为 RSS（RNZ Pacific + BBC Asia + Google News Vanuatu）。原 HTML 直爬 dailypost/rnz 在腾讯云出口易 403/超时，代码仍保留在 lib/sources/dailypost.js、rnz.js 供本机试验。",
     stats: {
       fetched: items.length,
       inserted: res.inserted.length,

@@ -15,28 +15,37 @@ function defaultReferer(url) {
 
 /**
  * @param {string} url
- * @param {{ referer?: string, timeoutMs?: number }} [opts]
+ * @param {{ referer?: string, timeoutMs?: number, acceptHeader?: string }} [opts]
  */
 async function fetchHtml(url, opts = {}) {
   const referer = opts.referer || defaultReferer(url);
   /* 云函数总时长有限；单次请求不宜过长，避免 6 串行详情把整段跑满 60s+ */
   const timeout = opts.timeoutMs ?? 10000;
 
+  const isFeed = Boolean(opts.acceptHeader && /rss|atom|\/xml/i.test(opts.acceptHeader));
+  const baseHeaders = {
+    "User-Agent": CHROME_UA,
+    Accept:
+      opts.acceptHeader ||
+      "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8",
+    "Accept-Language": "en-US,en;q=0.9",
+    "Accept-Encoding": "gzip, deflate",
+    ...(referer ? { Referer: referer } : {}),
+  };
+  const browserHints = isFeed
+    ? {}
+    : {
+        "Cache-Control": "no-cache",
+        Pragma: "no-cache",
+        "Sec-Fetch-Dest": "document",
+        "Sec-Fetch-Mode": "navigate",
+        "Sec-Fetch-Site": referer ? "same-origin" : "none",
+        "Upgrade-Insecure-Requests": "1",
+      };
+
   const config = {
     timeout,
-    headers: {
-      "User-Agent": CHROME_UA,
-      Accept: "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8",
-      "Accept-Language": "en-US,en;q=0.9",
-      "Accept-Encoding": "gzip, deflate",
-      "Cache-Control": "no-cache",
-      Pragma: "no-cache",
-      ...(referer ? { Referer: referer } : {}),
-      "Sec-Fetch-Dest": "document",
-      "Sec-Fetch-Mode": "navigate",
-      "Sec-Fetch-Site": referer ? "same-origin" : "none",
-      "Upgrade-Insecure-Requests": "1",
-    },
+    headers: { ...baseHeaders, ...browserHints },
     responseType: "text",
     maxRedirects: 8,
     validateStatus: (s) => s >= 200 && s < 400,
