@@ -1,17 +1,17 @@
 const axios = require("axios");
 
 /**
- * OpenAI-compatible Responses API wrapper.
+ * OpenAI-compatible Chat Completions API (works with DeepSeek, OpenAI, etc.)
  *
  * Env:
- * - AI_API_BASE: default https://api.openai.com/v1
+ * - AI_API_BASE: e.g. https://api.deepseek.com/v1  or  https://api.openai.com/v1
  * - AI_API_KEY: required
- * - AI_MODEL:   default gpt-4.1-mini (change as you like)
+ * - AI_MODEL:   e.g. deepseek-chat  or  gpt-4o-mini
  */
 async function summarizeToChinese({ title, excerptEn, maxChars = 180 }) {
-  const baseURL = process.env.AI_API_BASE || "https://api.openai.com/v1";
+  const baseURL = (process.env.AI_API_BASE || "https://api.openai.com/v1").replace(/\/$/, "");
   const apiKey = process.env.AI_API_KEY;
-  const model = process.env.AI_MODEL || "gpt-4.1-mini";
+  const model = process.env.AI_MODEL || "gpt-4o-mini";
   if (!apiKey) {
     const err = new Error("Missing env AI_API_KEY");
     err.code = "MISSING_AI_API_KEY";
@@ -27,14 +27,15 @@ async function summarizeToChinese({ title, excerptEn, maxChars = 180 }) {
   ].join("\n");
 
   const res = await axios.post(
-    `${baseURL}/responses`,
+    `${baseURL}/chat/completions`,
     {
       model,
-      input: prompt,
-      max_output_tokens: 200
+      messages: [{ role: "user", content: prompt }],
+      max_tokens: 300,
+      temperature: 0.3
     },
     {
-      timeout: 20000,
+      timeout: 25000,
       headers: {
         Authorization: `Bearer ${apiKey}`,
         "Content-Type": "application/json"
@@ -42,11 +43,7 @@ async function summarizeToChinese({ title, excerptEn, maxChars = 180 }) {
     }
   );
 
-  const out =
-    res.data?.output_text ||
-    res.data?.output?.[0]?.content?.[0]?.text ||
-    "";
-
+  const out = res.data?.choices?.[0]?.message?.content || "";
   const text = String(out).trim().replace(/\s+/g, " ");
   if (!text) return "";
   if (text.length <= maxChars) return text;
@@ -54,4 +51,3 @@ async function summarizeToChinese({ title, excerptEn, maxChars = 180 }) {
 }
 
 module.exports = { summarizeToChinese };
-
