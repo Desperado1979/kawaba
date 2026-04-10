@@ -116,6 +116,22 @@ Page({
     wx.navigateTo({ url: "/pages/search/index" });
   },
 
+  goClassifieds() {
+    wx.switchTab({ url: "/pages/classifieds/index" });
+  },
+
+  goYellowPage() {
+    wx.switchTab({ url: "/pages/yellowpage/index" });
+  },
+
+  goPublish() {
+    wx.navigateTo({ url: "/pages/publish/index" });
+  },
+
+  goMyClassifieds() {
+    wx.navigateTo({ url: "/pages/my-classifieds/index" });
+  },
+
   goNewsDetail(e) {
     const id = e.currentTarget.dataset.id;
     wx.navigateTo({ url: `/pages/news-detail/index?id=${id}` });
