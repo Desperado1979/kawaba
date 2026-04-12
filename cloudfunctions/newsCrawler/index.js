@@ -1,4 +1,5 @@
 const cloud = require("wx-server-sdk");
+const { crawlCgtnWorldRss, crawlUnNewsPeaceRss } = require("./lib/sources/world_news_rss");
 const { crawlVbtcRss } = require("./lib/sources/vbtc_rss");
 const { crawlEmbassyVanuatuChina } = require("./lib/sources/embassy_vu_china");
 const { crawlChinaDailyVanuatuOnly, crawlXinhuaVanuatuOnly } = require("./lib/sources/domestic_vu_rss");
@@ -107,6 +108,8 @@ async function runCrawl() {
   const enableReliefWeb = process.env.ENABLE_RELIEFWEB === "1";
 
   const jobs = [
+    ["cgtn_world", () => cappedCrawl(PER_SOURCE_MS, crawlCgtnWorldRss)],
+    ["un_news", () => cappedCrawl(PER_SOURCE_MS, crawlUnNewsPeaceRss)],
     ["vbtc_local", () => cappedCrawl(PER_SOURCE_MS, crawlVbtcRss)],
     ["embassy_vu", () => cappedCrawl(PER_SOURCE_MS, crawlEmbassyVanuatuChina)],
     ["chinadaily_vanuatu", () => cappedCrawl(PER_SOURCE_MS, crawlChinaDailyVanuatuOnly)],

@@ -10,6 +10,7 @@ Page({
       { key: "all", name: "全部" },
       { key: "local", name: "本地新闻" },
       { key: "chinese", name: "华人动态" },
+      { key: "world", name: "国际" },
       { key: "life", name: "生活资讯" }
     ],
     currentCategory: "all",
