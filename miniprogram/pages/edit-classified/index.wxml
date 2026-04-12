@@ -10,7 +10,7 @@
       <textarea class="form-textarea" maxlength="500" bindinput="onDescInput" value="{{description}}" />
     </view>
 
-    <view class="form-item">
+    <view class="form-item" wx:if="{{showPrice}}">
       <text class="form-label">价格 (VUV)</text>
       <input class="form-input" type="digit" bindinput="onPriceInput" value="{{price}}" />
     </view>

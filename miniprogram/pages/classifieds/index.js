@@ -62,7 +62,7 @@ Page({
         ...item,
         categoryName: CATEGORY_MAP[item.category] || item.category,
         timeText: util.formatTime(item.created_at),
-        priceText: util.formatPrice(item.price)
+        priceText: util.formatClassifiedPriceText(item.category, item.price)
       }));
 
       this.setData({
@@ -129,7 +129,7 @@ Page({
       ...item,
       categoryName: CATEGORY_MAP[item.category],
       timeText: util.formatTime(item.created_at),
-      priceText: util.formatPrice(item.price)
+      priceText: util.formatClassifiedPriceText(item.category, item.price)
     }));
     this.setData({ list: items, noMore: true });
   },

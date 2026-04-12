@@ -22,15 +22,19 @@ Page({
     location: "",
     contact: "",
     images: [],
-    submitting: false
+    submitting: false,
+    showPrice: true
   },
 
   onCategoryChange(e) {
     const idx = e.detail.value;
     const cat = CATEGORY_OPTIONS[idx];
+    const showPrice = util.classifiedShowsPrice(cat.key);
     this.setData({
       selectedCategory: cat.key,
-      selectedCategoryName: cat.name
+      selectedCategoryName: cat.name,
+      showPrice,
+      price: showPrice ? this.data.price : ""
     });
   },
 
@@ -92,11 +96,12 @@ Page({
         uploadedImages.push(uploadRes.fileID);
       }
 
+      const showPrice = util.classifiedShowsPrice(this.data.selectedCategory);
       await api.publishClassified({
         title: this.data.title.trim(),
         description: this.data.description.trim(),
         category: this.data.selectedCategory,
-        price: this.data.price ? Number(this.data.price) : null,
+        price: showPrice && this.data.price ? Number(this.data.price) : null,
         location: this.data.location.trim(),
         contact: this.data.contact.trim(),
         images: uploadedImages,

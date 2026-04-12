@@ -28,6 +28,19 @@ function formatPrice(price) {
   return "VUV " + Number(price).toLocaleString();
 }
 
+/** 寻物、招聘、生活服务：不按商品标价，不在界面展示价格 */
+const CLASSIFIED_NO_PRICE_CATEGORIES = ["lost", "job", "service"];
+
+function classifiedShowsPrice(category) {
+  return !CLASSIFIED_NO_PRICE_CATEGORIES.includes(category);
+}
+
+/** 列表/详情用：无价格类始终不展示价格文案 */
+function formatClassifiedPriceText(category, price) {
+  if (!classifiedShowsPrice(category)) return "";
+  return formatPrice(price);
+}
+
 function getOrCreateDeviceId() {
   const key = "kavabar_device_id";
   try {
@@ -45,5 +58,7 @@ function getOrCreateDeviceId() {
 module.exports = {
   formatTime,
   formatPrice,
+  formatClassifiedPriceText,
+  classifiedShowsPrice,
   getOrCreateDeviceId
 };

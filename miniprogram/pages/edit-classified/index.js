@@ -5,6 +5,8 @@ Page({
   data: {
     id: "",
     loaded: false,
+    category: "",
+    showPrice: true,
     title: "",
     description: "",
     price: "",
@@ -33,11 +35,14 @@ Page({
         return;
       }
 
+      const showPrice = util.classifiedShowsPrice(item.category);
       this.setData({
         loaded: true,
+        category: item.category || "",
+        showPrice,
         title: item.title || "",
         description: item.description || "",
-        price: item.price || "",
+        price: showPrice && item.price != null ? String(item.price) : "",
         location: item.location || "",
         contact: item.contact || ""
       });
@@ -65,10 +70,11 @@ Page({
 
     wx.showLoading({ title: "保存中..." });
     try {
+      const showPrice = util.classifiedShowsPrice(this.data.category);
       await api.updateClassified(this.data.id, {
         title: this.data.title.trim(),
         description: this.data.description.trim(),
-        price: this.data.price ? Number(this.data.price) : null,
+        price: showPrice && this.data.price ? Number(this.data.price) : null,
         location: this.data.location.trim(),
         contact: this.data.contact.trim(),
         updated_at: new Date()

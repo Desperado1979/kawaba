@@ -2,8 +2,11 @@ const api = require("../../utils/api");
 const util = require("../../utils/util");
 
 const CATEGORY_MAP = {
+  lost: "寻物启事",
   rent: "租房",
   job: "招聘",
+  business_transfer: "生意转让",
+  property: "土地物业",
   secondhand: "二手交易",
   service: "生活服务"
 };
@@ -26,7 +29,7 @@ Page({
         ...res.data,
         categoryName: CATEGORY_MAP[res.data.category] || res.data.category,
         timeText: util.formatTime(res.data.created_at),
-        priceText: util.formatPrice(res.data.price)
+        priceText: util.formatClassifiedPriceText(res.data.category, res.data.price)
       };
       this.setData({ item });
     } catch (e) {
