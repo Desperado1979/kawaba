@@ -53,14 +53,6 @@
     </view>
   </view>
 
-  <!-- 数据初始化入口 -->
-  <view class="init-section" wx:if="{{!dataReady}}">
-    <view class="init-btn" bindtap="onInitData">
-      <text>一键写入示例数据</text>
-    </view>
-    <text class="init-tip">请先在云开发控制台创建集合: news, classifieds, businesses, users</text>
-  </view>
-
   <!-- 最新资讯 -->
   <view class="section-header">
     <text class="section-title">最新资讯</text>
