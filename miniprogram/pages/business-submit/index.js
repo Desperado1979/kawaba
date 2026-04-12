@@ -21,6 +21,7 @@ Page({
     address: "",
     phone: "",
     description: "",
+    products: "",
     submitting: false
   },
 
@@ -28,6 +29,7 @@ Page({
   onAddress(e) { this.setData({ address: e.detail.value }); },
   onPhone(e) { this.setData({ phone: e.detail.value }); },
   onDesc(e) { this.setData({ description: e.detail.value }); },
+  onProducts(e) { this.setData({ products: e.detail.value }); },
 
   onCategoryChange(e) {
     const idx = Number(e.detail.value);
@@ -50,6 +52,7 @@ Page({
         address: this.data.address.trim(),
         phone: this.data.phone.trim(),
         description: this.data.description.trim(),
+        products: this.data.products.trim(),
         status: 0,
         created_at: new Date(),
         updated_at: new Date()

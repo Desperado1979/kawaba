@@ -2,8 +2,11 @@ const api = require("../../utils/api");
 const util = require("../../utils/util");
 
 const CATEGORY_OPTIONS = [
+  { key: "lost", name: "寻物启事" },
   { key: "rent", name: "租房" },
   { key: "job", name: "招聘" },
+  { key: "business_transfer", name: "生意转让" },
+  { key: "property", name: "土地物业" },
   { key: "secondhand", name: "二手交易" },
   { key: "service", name: "生活服务" }
 ];

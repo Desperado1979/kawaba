@@ -77,3 +77,10 @@
   text-align: center;
 }
 
+.form-hint {
+  display: block;
+  margin-top: 8rpx;
+  font-size: 22rpx;
+  color: #AAAAAA;
+}
+

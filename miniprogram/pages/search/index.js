@@ -1,20 +1,24 @@
 const api = require("../../utils/api");
 
 const KEYWORD_TO_CATEGORY = {
+  "丢": "lost", "丢失": "lost", "寻物": "lost", "找手机": "lost", "捡到": "lost",
   "租房": "rent", "出租": "rent", "房屋": "rent", "公寓": "rent",
   "招聘": "job", "求职": "job", "工作": "job", "兼职": "job",
-  "二手": "secondhand", "转让": "secondhand", "出售": "secondhand",
+  "生意": "business_transfer", "店铺": "business_transfer", "盘店": "business_transfer",
+  "土地": "property", "物业": "property", "地皮": "property", "买地": "property",
+  "二手": "secondhand", "出售": "secondhand",
+  "转让": "business_transfer",
   "服务": "service", "搬家": "service", "维修": "service", "清洁": "service",
   "餐饮": "food", "中餐": "food", "饭店": "food", "餐厅": "food",
   "超市": "market", "百货": "market",
   "旅游": "travel", "机票": "travel", "签证": "travel",
   "法律": "legal", "移民": "legal", "律师": "legal",
   "医疗": "medical", "诊所": "medical", "医生": "medical",
-  "汽车": "car", "修车": "car",
+  "汽车": "car", "修车": "car", "配件": "car", "零件": "car",
   "房产": "realestate", "买房": "realestate"
 };
 
-const CLASSIFIED_CATS = new Set(["rent", "job", "secondhand", "service"]);
+const CLASSIFIED_CATS = new Set(["lost", "rent", "job", "business_transfer", "property", "secondhand", "service"]);
 
 function matchCategory(keyword) {
   for (const [k, cat] of Object.entries(KEYWORD_TO_CATEGORY)) {
@@ -31,10 +35,14 @@ Page({
     bizResults: [],
     hasSearched: false,
     loading: false,
-    hotKeywords: ["租房", "招聘", "中餐", "签证", "机票", "超市", "搬家", "二手"]
+    hotKeywords: ["丢手机", "租房", "招聘", "生意转让", "土地", "刹车片", "二手", "中餐"]
   },
 
-  onLoad(options) {},
+  onLoad(options) {
+    if (options.focus === "products") {
+      this.setData({ keyword: "" });
+    }
+  },
 
   onInput(e) {
     this.setData({ keyword: e.detail.value });
@@ -62,7 +70,7 @@ Page({
       classifiedConditions.push({ category: cat });
     }
 
-    const bizConditions = [{ name: regex }, { description: regex }];
+    const bizConditions = [{ name: regex }, { description: regex }, { products: regex }];
     if (cat && !CLASSIFIED_CATS.has(cat)) {
       bizConditions.push({ category: cat });
     }

@@ -3,8 +3,11 @@ const util = require("../../utils/util");
 
 const CATEGORY_MAP = {
   all: "全部",
+  lost: "寻物启事",
   rent: "租房",
   job: "招聘",
+  business_transfer: "生意转让",
+  property: "土地物业",
   secondhand: "二手交易",
   service: "生活服务"
 };
@@ -12,11 +15,14 @@ const CATEGORY_MAP = {
 Page({
   data: {
     categories: [
-      { key: "all", name: "全部", icon: "/images/icons/all.svg" },
-      { key: "rent", name: "租房", icon: "/images/icons/rent.svg" },
-      { key: "job", name: "招聘", icon: "/images/icons/job.svg" },
-      { key: "secondhand", name: "二手", icon: "/images/icons/secondhand.svg" },
-      { key: "service", name: "服务", icon: "/images/icons/service.svg" }
+      { key: "all", name: "全部" },
+      { key: "lost", name: "寻物" },
+      { key: "rent", name: "租房" },
+      { key: "job", name: "招聘" },
+      { key: "business_transfer", name: "生意转让" },
+      { key: "property", name: "土地物业" },
+      { key: "secondhand", name: "二手" },
+      { key: "service", name: "服务" }
     ],
     currentCategory: "all",
     list: [],

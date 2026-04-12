@@ -133,6 +133,10 @@ Page({
     wx.switchTab({ url: "/pages/yellowpage/index" });
   },
 
+  goSearchProducts() {
+    wx.navigateTo({ url: "/pages/search/index?focus=products" });
+  },
+
   goPublish() {
     wx.navigateTo({ url: "/pages/publish/index" });
   },

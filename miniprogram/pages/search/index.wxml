@@ -64,6 +64,7 @@
       >
         <text class="result-title">{{item.name}}</text>
         <text class="result-desc ellipsis">{{item.address || ''}} · {{item.phone || ''}}</text>
+        <text class="result-products ellipsis" wx:if="{{item.products}}">商品: {{item.products}}</text>
       </view>
     </view>
 

@@ -140,6 +140,13 @@
   display: block;
 }
 
+.result-products {
+  font-size: 24rpx;
+  color: #CE1126;
+  margin-top: 6rpx;
+  display: block;
+}
+
 /* 空状态 */
 .empty-state {
   display: flex;

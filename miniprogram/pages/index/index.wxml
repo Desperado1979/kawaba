@@ -3,13 +3,17 @@
   <view class="search-bar" bindtap="goSearch">
     <view class="search-inner">
       <image class="search-icon" src="/images/icons/search.svg" mode="aspectFit" />
-      <text class="search-placeholder">搜索分类、商家、新闻...</text>
+      <text class="search-placeholder">找零件、找商家、找信息...</text>
     </view>
     <text class="location-tag">瓦努阿图</text>
   </view>
 
   <!-- 功能入口宫格 — 两排五列 -->
   <view class="quick-grid">
+    <view class="quick-item" bindtap="goCategory" data-type="classifieds" data-cat="lost">
+      <view class="quick-icon" style="background-color:#FFEBEE;">📱</view>
+      <text class="quick-label">寻物启事</text>
+    </view>
     <view class="quick-item" bindtap="goCategory" data-type="classifieds" data-cat="rent">
       <view class="quick-icon" style="background-color:#FFF3E0;">🏠</view>
       <text class="quick-label">房屋租赁</text>
@@ -18,38 +22,34 @@
       <view class="quick-icon" style="background-color:#E3F2FD;">💼</view>
       <text class="quick-label">求职招聘</text>
     </view>
-    <view class="quick-item" bindtap="goCategory" data-type="classifieds" data-cat="secondhand">
-      <view class="quick-icon" style="background-color:#E8F5E9;">🔄</view>
-      <text class="quick-label">二手交易</text>
+    <view class="quick-item" bindtap="goCategory" data-type="classifieds" data-cat="business_transfer">
+      <view class="quick-icon" style="background-color:#E8F5E9;">🏪</view>
+      <text class="quick-label">生意转让</text>
     </view>
-    <view class="quick-item" bindtap="goCategory" data-type="classifieds" data-cat="service">
-      <view class="quick-icon" style="background-color:#F3E5F5;">🛠️</view>
-      <text class="quick-label">生活服务</text>
-    </view>
-    <view class="quick-item" bindtap="goYellowPage">
-      <view class="quick-icon" style="background-color:#FFF8E1;">📒</view>
-      <text class="quick-label">黄页商家</text>
+    <view class="quick-item" bindtap="goCategory" data-type="classifieds" data-cat="property">
+      <view class="quick-icon" style="background-color:#F1F8E9;">🏝️</view>
+      <text class="quick-label">土地物业</text>
     </view>
 
+    <view class="quick-item" bindtap="goCategory" data-type="classifieds" data-cat="secondhand">
+      <view class="quick-icon" style="background-color:#E0F7FA;">🔄</view>
+      <text class="quick-label">二手交易</text>
+    </view>
     <view class="quick-item" bindtap="goCategory" data-type="yellowpage" data-cat="food">
       <view class="quick-icon" style="background-color:#FFF3E0;">🍜</view>
       <text class="quick-label">餐饮美食</text>
     </view>
-    <view class="quick-item" bindtap="goCategory" data-type="yellowpage" data-cat="car">
-      <view class="quick-icon" style="background-color:#E0F7FA;">🚗</view>
-      <text class="quick-label">汽车服务</text>
-    </view>
-    <view class="quick-item" bindtap="goCategory" data-type="yellowpage" data-cat="legal">
-      <view class="quick-icon" style="background-color:#F3E5F5;">⚖️</view>
-      <text class="quick-label">法律移民</text>
+    <view class="quick-item" bindtap="goSearchProducts">
+      <view class="quick-icon" style="background-color:#F3E5F5;">🔍</view>
+      <text class="quick-label">找零件</text>
     </view>
     <view class="quick-item" bindtap="goPublish">
       <view class="quick-icon" style="background-color:#E8F5E9;">✏️</view>
       <text class="quick-label">发布信息</text>
     </view>
-    <view class="quick-item" bindtap="goMyClassifieds">
-      <view class="quick-icon" style="background-color:#FCE4EC;">📌</view>
-      <text class="quick-label">我的发布</text>
+    <view class="quick-item" bindtap="goYellowPage">
+      <view class="quick-icon" style="background-color:#FFF8E1;">📒</view>
+      <text class="quick-label">黄页商家</text>
     </view>
   </view>
 
