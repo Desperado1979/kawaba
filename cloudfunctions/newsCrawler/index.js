@@ -14,6 +14,12 @@ const { md5 } = require("./lib/utils");
 cloud.init({ env: cloud.DYNAMIC_CURRENT_ENV });
 const db = cloud.database();
 
+function inferTranslationReady(title, excerptZh) {
+  if ((excerptZh || "").trim()) return true;
+  if (/[\u4e00-\u9fff]/.test(title || "")) return true;
+  return false;
+}
+
 function toHtmlExcerpt({ title, excerpt, url, source }) {
   const safeTitle = title || "";
   const safeExcerpt = excerpt || "";
@@ -51,11 +57,14 @@ async function upsertNews(items) {
       continue;
     }
 
+    const excerptZh = item.excerpt_zh || "";
+    const translation_ready = inferTranslationReady(title, excerptZh);
+
     const doc = {
       title,
       content: toHtmlExcerpt({
         title,
-        excerpt: item.excerpt_zh || item.excerpt_en || "",
+        excerpt: excerptZh || item.excerpt_en || "",
         url: originUrl,
         source: item.source,
       }),
@@ -69,7 +78,8 @@ async function upsertNews(items) {
       origin_url: originUrl,
       origin_lang: item.origin_lang || "en",
       excerpt_en: item.excerpt_en || "",
-      excerpt_zh: item.excerpt_zh || "",
+      excerpt_zh: excerptZh,
+      translation_ready,
       title_hash: titleHash,
     };
 

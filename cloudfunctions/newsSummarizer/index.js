@@ -125,6 +125,7 @@ exports.main = async (event) => {
           summarized_at: new Date()
         };
         if (titleZh) updateData.title_zh = titleZh;
+        updateData.translation_ready = true;
         await db.collection("news").doc(doc._id).update({ data: updateData });
       }
 

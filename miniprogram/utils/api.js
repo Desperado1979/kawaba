@@ -6,7 +6,7 @@ const PAGE_SIZE = 10;
 module.exports = {
   getTopNews() {
     return db.collection("news")
-      .where({ is_top: true })
+      .where({ is_top: true, translation_ready: _.neq(false) })
       .orderBy("created_at", "desc")
       .limit(5)
       .get();
@@ -54,7 +54,12 @@ module.exports = {
     const errors = [];
 
     for (const item of newsData) {
-      try { await db.collection("news").add({ data: item }); results.news++; } catch (e) { errors.push("news: " + e.message); }
+      try {
+        await db.collection("news").add({ data: { ...item, translation_ready: true } });
+        results.news++;
+      } catch (e) {
+        errors.push("news: " + e.message);
+      }
     }
     for (const item of classifiedsData) {
       try { await db.collection("classifieds").add({ data: item }); results.classifieds++; } catch (e) { errors.push("classifieds: " + e.message); }
@@ -75,7 +80,8 @@ module.exports = {
 
   getNewsList(category, page = 0) {
     // 须先 where 再 orderBy；先前写法在非「全部」时可能报错，触发首页 loadMockNews 假数据。
-    let query = db.collection("news");
+    // translation_ready: false 表示英文稿待翻译，首页不展示；缺省字段视为已就绪（旧数据）
+    let query = db.collection("news").where({ translation_ready: _.neq(false) });
     if (category && category !== "all") {
       if (category === "local") {
         query = query.where({ category: "local" });

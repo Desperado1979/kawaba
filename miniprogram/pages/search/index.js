@@ -78,7 +78,9 @@ Page({
     try {
       const [newsRes, classRes, bizRes] = await Promise.all([
         db.collection("news")
-          .where(_.or([{ title: regex }, { title_zh: regex }]))
+          .where(
+            _.and([{ translation_ready: _.neq(false) }, _.or([{ title: regex }, { title_zh: regex }])])
+          )
           .orderBy("created_at", "desc")
           .limit(10)
           .get()
