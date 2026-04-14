@@ -15,7 +15,9 @@ const KEYWORD_TO_CATEGORY = {
   "法律": "legal", "移民": "legal", "律师": "legal",
   "医疗": "medical", "诊所": "medical", "医生": "medical",
   "汽车": "car", "修车": "car", "配件": "car", "零件": "car",
-  "房产": "realestate", "买房": "realestate"
+  "房产": "realestate", "买房": "realestate",
+  "五金": "hardware", "建材": "hardware", "瓷砖": "hardware", "水泥": "hardware", "钢材": "hardware",
+  "洁具": "hardware", "卫浴": "hardware", "涂料": "hardware", "阀门": "hardware", "水暖": "hardware"
 };
 
 const CLASSIFIED_CATS = new Set(["lost", "rent", "job", "business_transfer", "property", "secondhand", "service"]);
@@ -35,7 +37,7 @@ Page({
     bizResults: [],
     hasSearched: false,
     loading: false,
-    hotKeywords: ["丢手机", "租房", "招聘", "生意转让", "土地", "刹车片", "二手", "中餐"]
+    hotKeywords: ["丢手机", "租房", "招聘", "生意转让", "土地", "刹车片", "五金建材", "二手", "中餐"]
   },
 
   onLoad(options) {

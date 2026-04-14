@@ -54,12 +54,12 @@ Page({
 
   onShareAppMessage() {
     return {
-      title: this.data.biz?.name || "商家推荐",
-      path: `/pages/business-detail/index?id=${this.data.id}`
+      title: "Kavabar 黄页商家",
+      path: "/pages/yellowpage/index"
     };
   },
 
   onShareTimeline() {
-    return { title: this.data.biz?.name || "Kavabar 商家推荐" };
+    return { title: "Kavabar 黄页商家" };
   }
 });

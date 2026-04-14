@@ -12,6 +12,7 @@ const CATEGORIES = [
   { key: "finance", name: "金融保险", emoji: "💰", bgColor: "#FFF9C4" },
   { key: "beauty", name: "美容美发", emoji: "💇", bgColor: "#FCE4EC" },
   { key: "repair", name: "维修装修", emoji: "🔧", bgColor: "#ECEFF1" },
+  { key: "hardware", name: "五金建材", emoji: "🧱", bgColor: "#EFEBE9" },
   { key: "other", name: "更多", emoji: "📋", bgColor: "#F5F5F5" }
 ];
 

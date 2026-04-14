@@ -1,33 +1,3 @@
-<view class="page-edit">
-  <view class="form-section" wx:if="{{loaded}}">
-    <view class="form-item">
-      <text class="form-label">标题 *</text>
-      <input class="form-input" maxlength="50" bindinput="onTitleInput" value="{{title}}" />
-    </view>
-
-    <view class="form-item">
-      <text class="form-label">详细描述</text>
-      <textarea class="form-textarea" maxlength="500" bindinput="onDescInput" value="{{description}}" />
-    </view>
-
-    <view class="form-item" wx:if="{{showPrice}}">
-      <text class="form-label">价格 (VUV)</text>
-      <input class="form-input" type="digit" bindinput="onPriceInput" value="{{price}}" />
-    </view>
-
-    <view class="form-item">
-      <text class="form-label">地点</text>
-      <input class="form-input" bindinput="onLocationInput" value="{{location}}" />
-    </view>
-
-    <view class="form-item">
-      <text class="form-label">联系电话 *</text>
-      <input class="form-input" type="number" bindinput="onContactInput" value="{{contact}}" />
-    </view>
-  </view>
-
-  <view class="submit-section safe-bottom">
-    <button class="submit-btn" bindtap="onSave">保存修改</button>
-  </view>
+<view class="page-edit-locked">
+  <no-user-publish topic="分类信息" />
 </view>
-

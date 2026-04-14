@@ -1,3 +1,5 @@
+const api = require("../../utils/api");
+
 Page({
   data: {
     isLogin: false,
@@ -19,11 +21,12 @@ Page({
         userInfo: app.globalData.userInfo
       });
     }
+    api.ensureSiteContact().catch(() => {});
   },
 
   onLogin() {
     wx.getUserProfile({
-      desc: "用于展示用户信息",
+      desc: "用于在「我的」页展示您的头像与昵称，便于识别账号；不用于营销",
       success: (res) => {
         const userInfo = {
           nickname: res.userInfo.nickName,
@@ -56,20 +59,28 @@ Page({
     wx.showToast({ title: "功能开发中", icon: "none" });
   },
 
-  goFeedback() {
-    wx.showModal({
-      title: "意见反馈",
-      content: "如有建议或问题，请联系我们：\nkavabar@community.vu",
-      showCancel: false
-    });
+  async goFeedback() {
+    const c = await api.ensureSiteContact();
+    let content = `如有建议或问题，请发邮件至：\n${c.contact_email}`;
+    if (c.contact_phone) content += `\n电话：${c.contact_phone}`;
+    if (c.contact_note) content += `\n\n${c.contact_note}`;
+    content += "\n\n也可在下方使用「联系客服」（若平台已恢复该能力）。";
+    wx.showModal({ title: "意见反馈", content, showCancel: false });
   },
 
-  goAbout() {
-    wx.showModal({
-      title: "关于 Kavabar",
-      content: "Kavabar 瓦努阿图华人社区\n\n致力于为瓦努阿图华人提供本地新闻资讯、分类信息、商家黄页等服务。\n\n版本：1.0.0",
-      showCancel: false
-    });
+  async goAbout() {
+    const c = await api.ensureSiteContact();
+    let content =
+      "Kavabar 瓦努阿图华人社区\n\n资讯、分类信息与商家黄页等内容由运营方在后台统一维护与审核发布；小程序内不提供用户自行发布、编辑或上传图文/音视频等功能。\n\n";
+    content += `如需刊登或更正信息，请联系：\n${c.contact_email}`;
+    if (c.contact_phone) content += `\n电话：${c.contact_phone}`;
+    if (c.contact_note) content += `\n\n${c.contact_note}`;
+    content += "\n\n版本：1.0.0";
+    wx.showModal({ title: "关于 Kavabar", content, showCancel: false });
+  },
+
+  goPrivacyPolicy() {
+    wx.navigateTo({ url: "/pages/privacy/index" });
   },
 
   onVersionTap() {

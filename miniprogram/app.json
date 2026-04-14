@@ -1,4 +1,5 @@
 {
+  "__usePrivacyCheck__": true,
   "pages": [
     "pages/index/index",
     "pages/classifieds/index",
@@ -12,7 +13,8 @@
     "pages/my-classifieds/index",
     "pages/edit-classified/index",
     "pages/admin/index",
-    "pages/business-submit/index"
+    "pages/business-submit/index",
+    "pages/privacy/index"
   ],
   "window": {
     "backgroundColor": "#F5F5F5",

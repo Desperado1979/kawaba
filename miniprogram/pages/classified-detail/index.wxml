@@ -34,11 +34,8 @@
   </view>
 
   <view class="bottom-bar safe-bottom" wx:if="{{item.contact}}">
-    <view class="contact-btn" bindtap="callContact">
+    <view class="contact-btn contact-btn-full" bindtap="callContact">
       <text>📞 联系发布者</text>
     </view>
-    <button class="share-btn" open-type="share">
-      <text>分享</text>
-    </button>
   </view>
 </view>

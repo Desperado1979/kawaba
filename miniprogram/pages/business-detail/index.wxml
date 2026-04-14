@@ -40,8 +40,5 @@
     <view class="nav-btn" bindtap="openMap" wx:if="{{biz.address}}">
       <text>🗺️ 导航前往</text>
     </view>
-    <button class="share-btn-biz" open-type="share">
-      <text>分享</text>
-    </button>
   </view>
 </view>

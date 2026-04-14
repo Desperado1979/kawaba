@@ -1,5 +1,7 @@
 {
   "navigationBarTitleText": "编辑信息",
-  "navigationBarBackgroundColor": "#1A1A1A"
+  "navigationBarBackgroundColor": "#1A1A1A",
+  "usingComponents": {
+    "no-user-publish": "/components/no-user-publish/index"
+  }
 }
-

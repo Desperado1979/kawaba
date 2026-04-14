@@ -1,0 +1,40 @@
+.page-privacy {
+  padding: 32rpx 28rpx 80rpx;
+  background: #fff;
+  min-height: 100vh;
+  font-size: 28rpx;
+  line-height: 1.65;
+  color: #333;
+}
+
+.h1 {
+  font-size: 36rpx;
+  font-weight: 700;
+  margin-bottom: 24rpx;
+}
+
+.h2 {
+  font-size: 30rpx;
+  font-weight: 600;
+  margin: 28rpx 0 12rpx;
+}
+
+.p {
+  margin-bottom: 16rpx;
+}
+
+.list {
+  padding-left: 24rpx;
+  margin-bottom: 16rpx;
+}
+
+.list-item {
+  display: block;
+  margin-bottom: 8rpx;
+}
+
+.update {
+  margin-top: 40rpx;
+  font-size: 24rpx;
+  color: #999;
+}

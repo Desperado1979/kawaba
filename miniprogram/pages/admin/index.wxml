@@ -7,12 +7,81 @@
   </view>
 
   <view wx:else>
+    <text class="admin-scope-tip">管理员可在此审核、上下架、手动录入分类信息与黄页商家（「录入」页），无需在云开发控制台逐条填库。</text>
+    <text class="admin-scope-tip admin-scope-tip2">「联系管理员」展示内容在「联系设置」中维护；云库需新建集合 site_settings，文档 _id 固定为 contact，并允许本小程序端对该文档 set（仅含邮箱/电话/说明，勿存密码）。</text>
     <view class="tabs">
       <view class="tab {{tab==='classifieds'?'active':''}}" bindtap="switchTab" data-tab="classifieds">分类信息</view>
       <view class="tab {{tab==='biz'?'active':''}}" bindtap="switchTab" data-tab="biz">入驻审核</view>
+      <view class="tab {{tab==='publish'?'active':''}}" bindtap="switchTab" data-tab="publish">录入</view>
+      <view class="tab {{tab==='settings'?'active':''}}" bindtap="switchTab" data-tab="settings">联系设置</view>
     </view>
 
-    <view class="filter-row">
+    <block wx:if="{{tab==='publish'}}">
+      <scroll-view class="publish-scroll" scroll-y>
+        <view class="settings-panel">
+          <view class="settings-card publish-card">
+            <text class="settings-section-title">分类信息</text>
+            <text class="settings-label">分类 *</text>
+            <picker mode="selector" range="{{classifiedCatOptions}}" range-key="name" value="{{cfCatIndex}}" bindchange="onCfCatChange">
+              <view class="picker-value">{{classifiedCatOptions[cfCatIndex].name}}</view>
+            </picker>
+            <text class="settings-label">初始状态</text>
+            <picker mode="selector" range="{{cfStatusLabels}}" value="{{cfStatusIndex}}" bindchange="onCfStatusChange">
+              <view class="picker-value">{{cfStatusLabels[cfStatusIndex]}}</view>
+            </picker>
+            <text class="settings-label">标题 *</text>
+            <input class="settings-input" placeholder="一句话标题" bindinput="onCfTitle" value="{{cfTitle}}" />
+            <text class="settings-label">详情 *</text>
+            <textarea class="settings-textarea" placeholder="正文描述" maxlength="2000" bindinput="onCfDesc" value="{{cfDesc}}"></textarea>
+            <text class="settings-label">价格（VUV，无则留空；招聘等可不填）</text>
+            <input class="settings-input" type="digit" placeholder="例如 85000" bindinput="onCfPrice" value="{{cfPrice}}" />
+            <text class="settings-label">联系电话 *</text>
+            <input class="settings-input" placeholder="+678 …" bindinput="onCfContact" value="{{cfContact}}" />
+            <text class="settings-label">位置（选填）</text>
+            <input class="settings-input" placeholder="区域或地址" bindinput="onCfLocation" value="{{cfLocation}}" />
+            <button class="settings-save" bindtap="onSubmitClassified">发布到分类信息</button>
+          </view>
+
+          <view class="settings-card publish-card">
+            <text class="settings-section-title">黄页商家</text>
+            <text class="settings-label">行业 *</text>
+            <picker mode="selector" range="{{bizCatOptions}}" range-key="name" value="{{bizCatIndex}}" bindchange="onBizCatChange">
+              <view class="picker-value">{{bizCatOptions[bizCatIndex].name}}</view>
+            </picker>
+            <text class="settings-label">商家名称 *</text>
+            <input class="settings-input" placeholder="店名" bindinput="onBizName" value="{{bizName}}" />
+            <text class="settings-label">电话 *</text>
+            <input class="settings-input" placeholder="+678 …" bindinput="onBizPhone" value="{{bizPhone}}" />
+            <text class="settings-label">地址</text>
+            <input class="settings-input" placeholder="街道或区域" bindinput="onBizAddress" value="{{bizAddress}}" />
+            <text class="settings-label">简介</text>
+            <textarea class="settings-textarea" placeholder="主营业务" maxlength="1000" bindinput="onBizDesc" value="{{bizDesc}}"></textarea>
+            <text class="settings-label">主营商品/服务（选填，便于搜索）</text>
+            <input class="settings-input" placeholder="关键词，如 川菜 火锅" bindinput="onBizProducts" value="{{bizProducts}}" />
+            <text class="settings-label">封面图（选填，云文件 ID 或 https 链接）</text>
+            <input class="settings-input" placeholder="可空" bindinput="onBizCover" value="{{bizCover}}" />
+            <text class="settings-label">评分 0–5（选填）</text>
+            <input class="settings-input" type="digit" placeholder="默认 0" bindinput="onBizRating" value="{{bizRating}}" />
+            <button class="settings-save" bindtap="onSubmitBusiness">发布到黄页商家库</button>
+          </view>
+        </view>
+      </scroll-view>
+    </block>
+    <block wx:elif="{{tab==='settings'}}">
+      <view class="settings-panel">
+        <view class="settings-card">
+          <text class="settings-label">对外邮箱 *</text>
+          <input class="settings-input" placeholder="用户联系管理员用" bindinput="onFormEmail" value="{{formEmail}}" />
+          <text class="settings-label">对外电话（选填）</text>
+          <input class="settings-input" placeholder="可不填" bindinput="onFormPhone" value="{{formPhone}}" />
+          <text class="settings-label">补充说明（选填）</text>
+          <textarea class="settings-textarea" placeholder="展示在发布说明页、分类加号弹窗等，如工作时间" maxlength="500" bindinput="onFormNote" value="{{formNote}}"></textarea>
+          <button class="settings-save" bindtap="onSaveSiteContact">保存联系信息</button>
+        </view>
+      </view>
+    </block>
+    <block wx:else>
+      <view class="filter-row">
       <view class="filter {{statusFilter===-999?'on':''}}" bindtap="setFilter" data-status="-999">全部</view>
       <view class="filter {{statusFilter===0?'on':''}}" bindtap="setFilter" data-status="0">待审</view>
       <view class="filter {{statusFilter===1?'on':''}}" bindtap="setFilter" data-status="1">上架</view>
@@ -63,7 +132,8 @@
       <view class="empty" wx:if="{{!loading && items.length===0}}">暂无数据</view>
       <view class="load" wx:if="{{loading}}">加载中...</view>
       <view class="load" wx:if="{{noMore && items.length>0}}">没有更多了</view>
-    </scroll-view>
+      </scroll-view>
+    </block>
   </view>
 </view>
 

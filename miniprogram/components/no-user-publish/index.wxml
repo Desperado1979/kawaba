@@ -1,0 +1,11 @@
+<view class="no-ugc">
+  <view class="no-ugc-card">
+    <text class="no-ugc-title">暂不支持用户自行录入</text>
+    <text wx:if="{{body}}" class="no-ugc-p">{{body}}</text>
+    <text wx:else class="no-ugc-p"><text class="no-ugc-strong">{{topic}}</text>由管理员在后台统一录入、审核与发布。您无法在小程序内自行填写文字、上传图片或音视频，亦不提供类似笔记、动态的发布功能。</text>
+    <text class="no-ugc-p">如需发布分类信息、申请黄页商家或修改/下架内容，请联系管理员：邮箱 {{contactEmail}}<text wx:if="{{contactPhone}}">；电话 {{contactPhone}}</text>；亦可通过「我的」—「意见反馈」。</text>
+    <text wx:if="{{contactNote}}" class="no-ugc-p no-ugc-note">{{contactNote}}</text>
+    <text class="no-ugc-p">使用本小程序即表示您知悉并同意遵守《微信小程序平台运营规范》等平台规则；涉及个人信息处理的，请阅读《隐私政策》。</text>
+    <button class="no-ugc-btn" bindtap="openPrivacy">查看《隐私政策》</button>
+  </view>
+</view>

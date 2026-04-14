@@ -102,14 +102,6 @@
   border-radius: 40rpx;
 }
 
-.share-btn {
+.contact-btn-full {
   flex: 1;
-  height: 80rpx;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: #F5F5F5 !important;
-  color: #333333;
-  font-size: 28rpx;
-  border-radius: 40rpx;
 }

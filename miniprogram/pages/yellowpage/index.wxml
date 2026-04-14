@@ -9,8 +9,8 @@
   
   <!-- 商家入驻 -->
   <view class="join-row" bindtap="goBusinessSubmit">
-    <text class="join-text">商家入驻</text>
-    <text class="join-tip">免费提交，审核后展示</text>
+    <text class="join-text">商家黄页说明</text>
+    <text class="join-tip">入驻由管理员后台录入，请点此查看说明</text>
     <text class="join-arrow">›</text>
   </view>
 

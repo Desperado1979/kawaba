@@ -22,8 +22,8 @@
   <!-- 快捷统计 -->
   <view class="stats-row">
     <view class="stat-item" bindtap="goMyPublish">
-      <text class="stat-num">{{stats.published || 0}}</text>
-      <text class="stat-label">我的发布</text>
+      <text class="stat-num">—</text>
+      <text class="stat-label">内容说明</text>
     </view>
     <view class="stat-item" bindtap="goMyFavorites">
       <text class="stat-num">{{stats.favorites || 0}}</text>
@@ -43,7 +43,7 @@
           <view class="menu-icon-wrap bg-primary">
             <text class="menu-icon-text">📝</text>
           </view>
-          <text class="menu-text">我的发布</text>
+          <text class="menu-text">内容说明</text>
         </view>
         <image class="menu-arrow" src="/images/arrow.svg" mode="aspectFit" />
       </view>
@@ -80,12 +80,32 @@
         <image class="menu-arrow" src="/images/arrow.svg" mode="aspectFit" />
       </view>
       <view class="divider"></view>
+      <button class="menu-item menu-contact-btn" open-type="contact" session-from="profile">
+        <view class="menu-left">
+          <view class="menu-icon-wrap" style="background-color: #E8F5E9;">
+            <text class="menu-icon-text">🎧</text>
+          </view>
+          <text class="menu-text">联系客服</text>
+        </view>
+        <image class="menu-arrow" src="/images/arrow.svg" mode="aspectFit" />
+      </button>
+      <view class="divider"></view>
       <view class="menu-item" bindtap="goAbout">
         <view class="menu-left">
           <view class="menu-icon-wrap" style="background-color: #F3E5F5;">
             <text class="menu-icon-text">ℹ️</text>
           </view>
           <text class="menu-text">关于我们</text>
+        </view>
+        <image class="menu-arrow" src="/images/arrow.svg" mode="aspectFit" />
+      </view>
+      <view class="divider"></view>
+      <view class="menu-item" bindtap="goPrivacyPolicy">
+        <view class="menu-left">
+          <view class="menu-icon-wrap" style="background-color: #ECEFF1;">
+            <text class="menu-icon-text">🔒</text>
+          </view>
+          <text class="menu-text">隐私政策</text>
         </view>
         <image class="menu-arrow" src="/images/arrow.svg" mode="aspectFit" />
       </view>

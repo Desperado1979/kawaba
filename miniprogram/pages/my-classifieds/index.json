@@ -1,6 +1,7 @@
 {
-  "navigationBarTitleText": "我的发布",
+  "navigationBarTitleText": "内容说明",
   "navigationBarBackgroundColor": "#1A1A1A",
-  "enablePullDownRefresh": true
+  "usingComponents": {
+    "no-user-publish": "/components/no-user-publish/index"
+  }
 }
-

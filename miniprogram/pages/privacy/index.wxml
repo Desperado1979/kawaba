@@ -1,0 +1,36 @@
+<view class="page-privacy">
+  <view class="h1">Kavabar 小程序隐私政策</view>
+  <view class="p">本政策说明 Kavabar（瓦努阿图华人社区信息小程序）如何收集、使用与保护您的个人信息。本小程序<strong>不提供</strong>用户自行发布、编辑或上传图文/音视频等功能；您浏览的资讯、分类信息与商家黄页主要由运营方在后台录入与维护。使用本小程序即表示您已阅读并理解本政策，并同意遵守《微信小程序平台运营规范》等与个人信息处理相关的平台规则。</view>
+
+  <view class="h2">一、我们收集的信息</view>
+  <view class="p">在<strong>当前版本</strong>下，您以浏览为主。我们可能收集或处理的个人信息主要包括：</view>
+  <view class="list">
+    <text class="list-item">• <strong>您自愿通过「意见反馈」等渠道向管理员提供的信息</strong>（如为协助刊登信息而提供的联系电话、文字说明）：仅用于与您沟通及在经您确认的范围内完成信息维护。</text>
+    <text class="list-item">• <strong>您在「我的」使用微信资料填写能力时提供的昵称、头像</strong>：仅用于在该页面展示，不用于商业营销。</text>
+    <text class="list-item">• <strong>技术日志与设备信息</strong>：为保障服务安全与统计分析，可能由微信平台或云开发环境按系统能力处理（以微信官方披露为准）。</text>
+  </view>
+  <view class="p">本小程序<strong>不主动读取</strong>您的微信通讯录、短信；不在应用内提供用户生成内容（UGC）发布入口。</view>
+
+  <view class="h2">二、使用目的</view>
+  <view class="list">
+    <text class="list-item">• 展示、检索由运营方维护的资讯、分类信息与商家信息；</text>
+    <text class="list-item">• 在信息详情页展示由运营方录入的联系电话，并提供「拨打电话」入口（若该条信息含有号码）；</text>
+    <text class="list-item">• 管理员在后台进行内容审核与更新；</text>
+    <text class="list-item">• 保障服务安全与合规。</text>
+  </view>
+  <view class="p">我们<strong>不会</strong>将您用于联系管理员的号码用于商业营销，也<strong>不会</strong>向与本服务无关的第三方出售或出租。</view>
+
+  <view class="h2">三、存储与地点</view>
+  <view class="p">数据存储于微信云开发（腾讯云）相关环境，用于小程序运行所必需的范围。我们会在实现目的所必需的期限内保留信息；您要求删除或更正的，请发邮件至 {{contactEmail}} 或通过「我的」—「意见反馈」联系我们，我们将在合理期限内处理。</view>
+
+  <view class="h2">四、您的权利</view>
+  <view class="p">您可就与您相关的个人信息行使查询、更正、删除等请求，请发邮件至 {{contactEmail}}，或通过「我的」-「联系客服」与我们联系（若该能力可用）。我们将在合理期限内响应。</view>
+
+  <view class="h2">五、未成年人</view>
+  <view class="p">若您为未成年人，请在监护人指导下阅读本政策并使用服务。</view>
+
+  <view class="h2">六、政策更新</view>
+  <view class="p">我们可能适时修订本政策，更新后将在本页面展示。若修订涉及收集使用规则的重大变更，我们将通过页面提示等方式重新征求您的同意。</view>
+
+  <view class="update">最近更新：2026年4月</view>
+</view>

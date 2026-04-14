@@ -102,6 +102,22 @@
   padding: 28rpx 24rpx;
 }
 
+button.menu-contact-btn {
+  width: 100%;
+  margin: 0;
+  padding: 28rpx 24rpx;
+  background-color: #ffffff;
+  border: none;
+  border-radius: 0;
+  line-height: inherit;
+  font-size: inherit;
+  text-align: left;
+}
+
+button.menu-contact-btn::after {
+  border: none;
+}
+
 .menu-left {
   display: flex;
   align-items: center;

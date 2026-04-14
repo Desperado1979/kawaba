@@ -57,7 +57,7 @@
       </view>
 
       <view class="empty-state" wx:if="{{!loading && list.length === 0}}">
-        <text class="empty-text">暂无信息，快来发布第一条吧</text>
+        <text class="empty-text">暂无信息，内容由管理员维护更新</text>
       </view>
 
       <view class="load-more" wx:if="{{loading}}">
@@ -72,5 +72,17 @@
   <!-- 发布按钮 -->
   <view class="fab-btn" bindtap="goPublish">
     <text class="fab-icon">+</text>
+  </view>
+
+  <!-- 自定义弹层（系统 showModal 无法内嵌 open-type="contact"） -->
+  <view class="gate-mask" wx:if="{{showPublishGate}}" bindtap="closePublishGate">
+    <view class="gate-dialog" catchtap="gateDialogTap">
+      <text class="gate-title">发布与咨询</text>
+      <text class="gate-desc">本小程序不提供用户自行发布信息。如需刊登分类信息或咨询，请联系客服；也可查看发布说明了解规则与联系方式。</text>
+      <text wx:if="{{gateNote}}" class="gate-note">{{gateNote}}</text>
+      <button class="gate-btn gate-btn-contact" open-type="contact" session-from="classifieds_fab">联系客服</button>
+      <button class="gate-btn gate-btn-outline" bindtap="goPublishHelp">查看发布说明</button>
+      <view class="gate-close" bindtap="closePublishGate">关闭</view>
+    </view>
   </view>
 </view>

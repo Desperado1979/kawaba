@@ -1,6 +1,15 @@
 const api = require("../../utils/api");
 const util = require("../../utils/util");
 
+async function refreshGateNote(page) {
+  try {
+    const c = await api.ensureSiteContact();
+    page.setData({ gateNote: c.contact_note || "" });
+  } catch (e) {
+    page.setData({ gateNote: "" });
+  }
+}
+
 const CATEGORY_MAP = {
   all: "全部",
   lost: "寻物启事",
@@ -28,14 +37,18 @@ Page({
     list: [],
     page: 0,
     loading: false,
-    noMore: false
+    noMore: false,
+    showPublishGate: false,
+    gateNote: ""
   },
 
   onLoad() {
     this.loadList();
+    refreshGateNote(this);
   },
 
   onShow() {
+    refreshGateNote(this);
     const app = getApp();
     const pending = app.globalData.pendingClassifiedCat;
     if (pending) {
@@ -152,6 +165,17 @@ Page({
   },
 
   goPublish() {
+    this.setData({ showPublishGate: true });
+  },
+
+  closePublishGate() {
+    this.setData({ showPublishGate: false });
+  },
+
+  gateDialogTap() {},
+
+  goPublishHelp() {
+    this.setData({ showPublishGate: false });
     wx.navigateTo({ url: "/pages/publish/index" });
   },
 

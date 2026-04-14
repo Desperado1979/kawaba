@@ -49,12 +49,12 @@ Page({
 
   onShareAppMessage() {
     return {
-      title: this.data.item?.title || "分类信息",
-      path: `/pages/classified-detail/index?id=${this.data.id}`
+      title: "Kavabar 分类信息",
+      path: "/pages/classifieds/index"
     };
   },
 
   onShareTimeline() {
-    return { title: this.data.item?.title || "Kavabar 分类信息" };
+    return { title: "Kavabar 分类信息" };
   }
 });

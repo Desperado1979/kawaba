@@ -1,10 +1,60 @@
-const db = wx.cloud.database();
-const _ = db.command;
+/** 须在 wx.cloud.init 之后调用；禁止在模块顶层 wx.cloud.database()，否则 app 加载早于 init 会报错 */
+function cloudDatabase() {
+  return wx.cloud.database();
+}
+function dbCommand() {
+  return cloudDatabase().command;
+}
 
 const PAGE_SIZE = 10;
 
+const SITE_SETTINGS = "site_settings";
+const SITE_CONTACT_ID = "contact";
+
+const DEFAULT_SITE_CONTACT = {
+  contact_email: "71658874@qq.com",
+  contact_phone: "",
+  contact_note: ""
+};
+
+async function getSiteContact() {
+  try {
+    const res = await cloudDatabase().collection(SITE_SETTINGS).doc(SITE_CONTACT_ID).get();
+    const d = res.data;
+    if (!d) return { ...DEFAULT_SITE_CONTACT };
+    return {
+      contact_email: String(d.contact_email || DEFAULT_SITE_CONTACT.contact_email).trim() || DEFAULT_SITE_CONTACT.contact_email,
+      contact_phone: String(d.contact_phone || "").trim(),
+      contact_note: String(d.contact_note || "").trim()
+    };
+  } catch (e) {
+    return { ...DEFAULT_SITE_CONTACT };
+  }
+}
+
+/** 写入「联系管理员」配置；需在云库创建集合 site_settings，并允许管理员端 set（见管理页提示）。 */
+function saveSiteContact(data) {
+  const payload = {
+    contact_email: String(data.contact_email || "").trim() || DEFAULT_SITE_CONTACT.contact_email,
+    contact_phone: String(data.contact_phone || "").trim(),
+    contact_note: String(data.contact_note || "").trim(),
+    updated_at: new Date()
+  };
+  return cloudDatabase().collection(SITE_SETTINGS).doc(SITE_CONTACT_ID).set({ data: payload });
+}
+
+async function ensureSiteContact(appInstance) {
+  const app = appInstance || getApp();
+  if (app.globalData.siteContact) return app.globalData.siteContact;
+  const c = await getSiteContact();
+  app.globalData.siteContact = c;
+  return c;
+}
+
 module.exports = {
   getTopNews() {
+    const db = wx.cloud.database();
+    const _ = db.command;
     return db.collection("news")
       .where({ is_top: true, translation_ready: _.neq(false) })
       .orderBy("created_at", "desc")
@@ -55,17 +105,17 @@ module.exports = {
 
     for (const item of newsData) {
       try {
-        await db.collection("news").add({ data: { ...item, translation_ready: true } });
+        await cloudDatabase().collection("news").add({ data: { ...item, translation_ready: true } });
         results.news++;
       } catch (e) {
         errors.push("news: " + e.message);
       }
     }
     for (const item of classifiedsData) {
-      try { await db.collection("classifieds").add({ data: item }); results.classifieds++; } catch (e) { errors.push("classifieds: " + e.message); }
+      try { await cloudDatabase().collection("classifieds").add({ data: item }); results.classifieds++; } catch (e) { errors.push("classifieds: " + e.message); }
     }
     for (const item of businessesData) {
-      try { await db.collection("businesses").add({ data: item }); results.businesses++; } catch (e) { errors.push("businesses: " + e.message); }
+      try { await cloudDatabase().collection("businesses").add({ data: item }); results.businesses++; } catch (e) { errors.push("businesses: " + e.message); }
     }
 
     return { success: errors.length === 0, results, errors: errors.slice(0, 3) };
@@ -81,6 +131,8 @@ module.exports = {
   getNewsList(category, page = 0) {
     // 须先 where 再 orderBy；先前写法在非「全部」时可能报错，触发首页 loadMockNews 假数据。
     // translation_ready: false 表示英文稿待翻译，首页不展示；缺省字段视为已就绪（旧数据）
+    const db = wx.cloud.database();
+    const _ = db.command;
     let query = db.collection("news").where({ translation_ready: _.neq(false) });
     if (category && category !== "all") {
       if (category === "local") {
@@ -97,17 +149,17 @@ module.exports = {
   },
 
   getNewsDetail(id) {
-    return db.collection("news").doc(id).get();
+    return cloudDatabase().collection("news").doc(id).get();
   },
 
   incrementViewCount(id) {
-    return db.collection("news").doc(id).update({
-      data: { view_count: _.inc(1) }
+    return cloudDatabase().collection("news").doc(id).update({
+      data: { view_count: dbCommand().inc(1) }
     });
   },
 
   getClassifiedsList(category, page = 0) {
-    let query = db.collection("classifieds")
+    let query = cloudDatabase().collection("classifieds")
       .where({ status: 1 })
       .orderBy("created_at", "desc");
     if (category && category !== "all") {
@@ -117,15 +169,16 @@ module.exports = {
   },
 
   getClassifiedDetail(id) {
-    return db.collection("classifieds").doc(id).get();
+    return cloudDatabase().collection("classifieds").doc(id).get();
   },
 
+  /** 小程序端已关闭用户发布；请勿从页面调用。新增数据请用云开发控制台或仅管理员可信环境写入。 */
   publishClassified(data) {
-    return db.collection("classifieds").add({ data });
+    return cloudDatabase().collection("classifieds").add({ data });
   },
 
   getMyClassifieds(deviceId, page = 0) {
-    return db.collection("classifieds")
+    return cloudDatabase().collection("classifieds")
       .where({ device_id: deviceId })
       .orderBy("created_at", "desc")
       .skip(page * PAGE_SIZE)
@@ -134,36 +187,93 @@ module.exports = {
   },
 
   updateClassified(id, data) {
-    return db.collection("classifieds").doc(id).update({ data });
+    return cloudDatabase().collection("classifieds").doc(id).update({ data });
+  },
+
+  /** 管理员在管理页录入；写入 classifieds，需云库允许小程序端 add */
+  adminAddClassified(input) {
+    const title = String(input.title || "").trim();
+    const description = String(input.description || "").trim();
+    const category = input.category;
+    const contact = String(input.contact || "").trim();
+    if (!title || !description || !category || !contact) {
+      return Promise.reject(new Error("请填写标题、详情、分类与联系方式"));
+    }
+    let price = input.price;
+    if (price === "" || price === undefined || price === null) {
+      price = null;
+    } else {
+      const n = Number(price);
+      price = Number.isFinite(n) ? n : null;
+    }
+    const status = input.status === 0 ? 0 : 1;
+    const data = {
+      title,
+      description,
+      category,
+      price,
+      contact,
+      location: String(input.location || "").trim(),
+      images: Array.isArray(input.images) ? input.images : [],
+      status,
+      created_at: new Date(),
+      device_id: "admin"
+    };
+    return cloudDatabase().collection("classifieds").add({ data });
+  },
+
+  /** 管理员直接写入黄页 businesses（不经入驻申请） */
+  adminAddBusiness(input) {
+    const name = String(input.name || "").trim();
+    const category = input.category;
+    const phone = String(input.phone || "").trim();
+    if (!name || !category || !phone) {
+      return Promise.reject(new Error("请填写商家名称、分类与电话"));
+    }
+    let rating = Number(input.rating);
+    if (!Number.isFinite(rating) || rating < 0) rating = 0;
+    if (rating > 5) rating = 5;
+    const data = {
+      name,
+      category,
+      address: String(input.address || "").trim(),
+      phone,
+      description: String(input.description || "").trim(),
+      cover_image: String(input.cover_image || "").trim(),
+      products: String(input.products || "").trim(),
+      rating,
+      created_at: new Date()
+    };
+    return cloudDatabase().collection("businesses").add({ data });
   },
 
   adminGetClassifieds(status, page = 0) {
-    let query = db.collection("classifieds").orderBy("created_at", "desc");
+    let query = cloudDatabase().collection("classifieds").orderBy("created_at", "desc");
     if (status !== -999) query = query.where({ status });
     return query.skip(page * PAGE_SIZE).limit(PAGE_SIZE).get();
   },
 
   // business submissions (admin + user)
   submitBusiness(data) {
-    return db.collection("business_submissions").add({ data });
+    return cloudDatabase().collection("business_submissions").add({ data });
   },
 
   adminGetBusinessSubmissions(status, page = 0) {
-    let query = db.collection("business_submissions").orderBy("created_at", "desc");
+    let query = cloudDatabase().collection("business_submissions").orderBy("created_at", "desc");
     if (status !== -999) query = query.where({ status });
     return query.skip(page * PAGE_SIZE).limit(PAGE_SIZE).get();
   },
 
   adminUpdateBusinessSubmission(id, data) {
-    return db.collection("business_submissions").doc(id).update({ data });
+    return cloudDatabase().collection("business_submissions").doc(id).update({ data });
   },
 
   async adminApproveBusinessSubmission(id) {
-    const subRes = await db.collection("business_submissions").doc(id).get();
+    const subRes = await cloudDatabase().collection("business_submissions").doc(id).get();
     const sub = subRes.data;
     if (!sub) throw new Error("submission not found");
 
-    await db.collection("businesses").add({
+    await cloudDatabase().collection("businesses").add({
       data: {
         name: sub.name,
         category: sub.category,
@@ -176,13 +286,13 @@ module.exports = {
       }
     });
 
-    await db.collection("business_submissions").doc(id).update({
+    await cloudDatabase().collection("business_submissions").doc(id).update({
       data: { status: 1, updated_at: new Date() }
     });
   },
 
   getBusinessList(category, page = 0) {
-    let query = db.collection("businesses").orderBy("rating", "desc");
+    let query = cloudDatabase().collection("businesses").orderBy("rating", "desc");
     if (category && category !== "all") {
       query = query.where({ category });
     }
@@ -190,13 +300,13 @@ module.exports = {
   },
 
   getBusinessDetail(id) {
-    return db.collection("businesses").doc(id).get();
+    return cloudDatabase().collection("businesses").doc(id).get();
   },
 
   search(keyword, collection, page = 0) {
-    return db.collection(collection)
+    return cloudDatabase().collection(collection)
       .where({
-        title: db.RegExp({
+        title: cloudDatabase().RegExp({
           regexp: keyword,
           options: "i"
         })
@@ -207,16 +317,22 @@ module.exports = {
   },
 
   getUserInfo(openid) {
-    return db.collection("users").where({ openid }).get();
+    return cloudDatabase().collection("users").where({ openid }).get();
   },
 
   updateUserInfo(openid, data) {
-    return db.collection("users").where({ openid }).update({ data });
+    return cloudDatabase().collection("users").where({ openid }).update({ data });
   },
 
   createUser(data) {
-    return db.collection("users").add({ data });
+    return cloudDatabase().collection("users").add({ data });
   },
 
-  PAGE_SIZE
+  PAGE_SIZE,
+  SITE_SETTINGS,
+  SITE_CONTACT_ID,
+  DEFAULT_SITE_CONTACT,
+  getSiteContact,
+  saveSiteContact,
+  ensureSiteContact
 };

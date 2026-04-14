@@ -45,7 +45,7 @@
     </view>
     <view class="quick-item" bindtap="goPublish">
       <view class="quick-icon" style="background-color:#E8F5E9;">✏️</view>
-      <text class="quick-label">发布信息</text>
+      <text class="quick-label">发布说明</text>
     </view>
     <view class="quick-item" bindtap="goYellowPage">
       <view class="quick-icon" style="background-color:#FFF8E1;">📒</view>

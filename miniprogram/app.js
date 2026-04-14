@@ -3,6 +3,8 @@ App({
     env: "cloud1-4gpp2a4lba18afaf",
     userInfo: null,
     isLogin: false,
+    /** 联系管理员配置，见云库 site_settings / contact */
+    siteContact: null,
     // Admin gate for simple in-app moderation page.
     // Change this value before releasing publicly.
     adminKey: "kavabar-admin"
@@ -16,6 +18,11 @@ App({
     wx.cloud.init({
       env: this.globalData.env,
       traceUser: true
+    });
+
+    const api = require("./utils/api");
+    api.ensureSiteContact(this).catch(() => {
+      this.globalData.siteContact = { ...api.DEFAULT_SITE_CONTACT };
     });
 
     this.checkUpdate();
